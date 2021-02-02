@@ -1,5 +1,5 @@
 FROM node:15.6.0-alpine
-COPY ./server/ /app/
+COPY . /app/
 WORKDIR /app
 RUN npm install -g npm@latest
 RUN npm install

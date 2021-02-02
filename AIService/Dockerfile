@@ -1,5 +1,5 @@
 FROM python:3.7.9-alpine
-COPY ./AIService/ /app/
+COPY . /app/
 WORKDIR /app
 RUN python -m pip install --upgrade pip
 RUN python -m venv env
