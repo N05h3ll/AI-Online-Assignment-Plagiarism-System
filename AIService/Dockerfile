@@ -1,6 +1,7 @@
 FROM python:3.7.9-alpine
-COPY . /app/
-WORKDIR /app
+RUN mkdir /usr/src/app/
+COPY . /usr/src/app/
+WORKDIR /usr/src/app/
 RUN python -m pip install --upgrade pip
 RUN python -m venv env
 RUN source ./env/bin/activate
