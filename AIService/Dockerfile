@@ -1,4 +1,4 @@
-FROM python:3.7.9-alpine
+FROM python:3.7.9-slim-buster
 RUN mkdir /usr/src/app/
 COPY . /usr/src/app/
 WORKDIR /usr/src/app/
