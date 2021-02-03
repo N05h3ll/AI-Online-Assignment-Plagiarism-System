@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:4.0
+    ports: 
+      - "27017:27017"
+  backend:
+    build: ./server
+    ports:
+      - "3000:3000"
+    env_file: 
+      - .env
+    depends_on: 
+      - mongo
+  ai:
+    build: ./AIService
+    ports: 
+      - "5000:5000"
+    depends_on: 
+      - backend
+  frontend:
+    build: ./client
+    ports: 
+      - "8080:8080"
+    depends_on: 
+      - ai
+      - backend
+      - mongo
