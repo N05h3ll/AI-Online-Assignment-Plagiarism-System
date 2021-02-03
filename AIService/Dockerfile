@@ -8,7 +8,7 @@ RUN /bin/bash -c "source /usr/src/app/env/bin/activate"
 RUN pip install -r requirements.txt
 RUN /bin/bash -c "apt update && apt install -y wget"
 RUN /bin/bash -c "wget https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz -P /usr/src/app/data/"
-RUN /bin/bash -c "wget https://drive.google.com/uc?export=download&id=12wkwCK5WE6poVuODwlT7VTMzttZ2HH5j -P /usr/src/app/data/"
+RUN /bin/bash -c "wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=12wkwCK5WE6poVuODwlT7VTMzttZ2HH5j' -O HeighstModel.h5 -P /usr/src/app/data/"
 RUN python -m nltk.downloader stopwords
 EXPOSE 5000
 CMD ["python","app.py"]
