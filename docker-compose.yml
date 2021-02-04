@@ -1,25 +1,35 @@
 version: "3.9"
 services:
   mongo:
+    container_name: mongo
     image: mongo:4.0
-    ports: 
+    ports:
       - "27017:27017"
+
   backend:
-    build: ./server
+    build:
+      context: ./server
+      network: host
     ports:
       - "3000:3000"
     env_file: 
       - .env
+    links:
+      - mongo
     depends_on: 
       - mongo
   ai:
-    build: ./AIService
+    build:
+      context: ./AIService
+      network: host
     ports: 
       - "5000:5000"
     depends_on: 
       - backend
   frontend:
-    build: ./client
+    build:
+      context: ./client
+      network: host
     ports: 
       - "8080:8080"
     depends_on: 
