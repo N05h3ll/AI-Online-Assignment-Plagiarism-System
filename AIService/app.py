@@ -1,7 +1,7 @@
 from flask import Flask, request, make_response
 from werkzeug.utils import secure_filename
 import os
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from datetime import datetime
 import spacy
 import en_core_web_sm
@@ -16,11 +16,7 @@ from gensim.models import KeyedVectors
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 app= Flask(__name__)
-CORS(app, supports_credentials=True)
-
-
-f = open('report.json',)
-data = json.load(f)
+CORS(app, origins=['*'], supports_credentials=True)
 
 
 uploadFolder = './public'
@@ -37,6 +33,7 @@ def allowed_file(filename):
 
 
 @app.route('/', methods=['POST', 'GET'])
+@cross_origin(origin='*')
 def index():
     if request.method == 'POST':
         print('POST')
@@ -121,15 +118,9 @@ def index():
             responseObject['email'] = request.values['user']
             reportJson = json.loads(json.dumps(responseObject, indent=2))
             print(reportJson)
-
-
-            # email = { "email": request.values['user']}
-            # print(email)
-            # data.update(email)
             res = requests.post('http://127.0.0.1:3000/api/addreport', json=reportJson)
-            # print(res.content)
             
             return 'DONE'
     return "GET Response"
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
