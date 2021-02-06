@@ -76,7 +76,7 @@ import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { computed, ref, watch } from 'vue';
 
-const Report = computed(() => useStore().state.Report.report);
+const Report = computed(() => useStore().state.Report.singleReport);
 export default {
   setup() {
     // eslint-disable-next-line no-unused-vars
