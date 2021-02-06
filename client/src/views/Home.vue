@@ -1,4 +1,5 @@
 <template>
+<div class="container-fluid ">
   <div v-if="!state.user">
     <!--welcome-->
     <div class="container">
@@ -24,7 +25,7 @@
     </div>
   </div>
     <!--search box-->
-    <div class="float-end me-sm-3" v-if="state.user">
+    <div class="w-25 float-end row" v-if="state.user">
       <div class="input-group mb-3">
         <input
           type="text"
@@ -32,9 +33,10 @@
           placeholder="Assigment"
           aria-label="Assigment"
           aria-describedby="basic-addon1"
+          v-model="state.query"
         />
-        <span class="input-group-text" id="basic-addon1"
-          ><svg
+        <span class="btn btn-secondary" id="basic-addon1"
+          @click="search"><svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
             height="16"
@@ -53,31 +55,33 @@
     </div>
     <!--/search box-->
     <!--assigment-->
-    <div class="container" id="middleContainer" v-if="state.user">
-      <div class="row">
+    <div class="container row" id="middleContainer" v-if="state.user">
+      <div class="row"
+      v-if="state.user.accType !== 'Module Coordinator'
+      && state.user.accType !== 'Teacher Assitant'">
         <div class="container">
           <div class="row align-items-center">
             <div class="col">
               <div class="d-grid gap-3 col-5 ">
                 <button
-                  class="btn btn-lg btn-primary"
+                  v-bind:class="'btn btn-lg '+ state.reportButtonClass"
                   type="button"
-                  onclick="location.href='ListReports.html'"
+                  @click="toggleReports"
                 >
                   Reports
                 </button>
                 <button
-                  class="btn btn-lg btn-warning"
+                  v-bind:class="'btn btn-lg '+ state.assignmentButtonClass"
                   type="button"
-                  onclick="location.href='Assignments.html'"
+                  @click="toggleAssignments"
                 >
                   Assigment
                 </button>
               </div>
             </div>
             <div class="col rounded me-sm-3" id="registerationFormContanier">
-              <h2 class="h2 m-3 text-dark">Reports</h2>
-              <div class="table-responsive">
+              <h2 class="h2 m-3 text-dark">{{state.titleState}}</h2>
+              <div class="table-responsive" v-if="state.titleState == 'Reports'">
                 <table class="table">
                   <thead>
                     <tr>
@@ -106,11 +110,68 @@
             </div>
           </div>
         </div>
-    <router-link :to="{ name: 'Upload' }">
+        <div>
+          <router-link :to="{ name: 'Upload' }">
     <button class="btn btn-success float-end m-lg-5">Upload New Document</button>
+    </router-link>
+          </div>
+      </div>
+    </div>
+
+<!-- MODULE COORDINATOR -->
+<div class="container row" id="middleContainer"
+    v-if="state.user">
+      <div class="row" v-if="state.user.accType == 'Module Coordinator'">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col">
+              <div class="d-grid gap-3 col-5 ">
+                <button
+                  class="btn btn-lg btn-warning"
+                  type="button"
+                  onclick="location.href='Assignments.html'"
+                >
+                  Assignments
+                </button>
+              </div>
+            </div>
+            <div class="col rounded me-sm-3" id="registerationFormContanier">
+              <h2 class="h2 m-3 text-dark">Assignments</h2>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Code</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="assigment in state.listOfAssignments" :key="assigment">
+                      <td>{{ assigment.name }}</td>
+                      <td>{{ assigment.code }}</td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-primary btn-sm"
+                          @click="getReports(assignment._id)"
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    <router-link :to="{ name: 'AddAssignment' }">
+    <button class="btn btn-success float-end m-lg-5">Allocate a new assignment</button>
     </router-link>
       </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -121,6 +182,7 @@ import { useStore } from 'vuex';
 
 const user = computed(() => useStore().state.User.user);
 const listOfReports = computed(() => useStore().state.Report.listOfReports);
+const listOfAssignments = computed(() => useStore().state.Assignment.listOfAssignments);
 export default {
   name: 'Upload',
   mounted() {
@@ -130,6 +192,10 @@ export default {
         console.log(res.data);
         store.dispatch('Report/setListOfReports', res.data);
       });
+      axios.get('http://127.0.0.1:3000/api/assignment/getallassignments').then((res) => {
+        console.log(res.data);
+        store.dispatch('Assignment/setListOfAssignments', res.data);
+      });
     }
   },
   setup() {
@@ -138,17 +204,40 @@ export default {
       // console.log(reportID);
       router.push({ name: 'Report', params: { repid: reportID } });
     }
-
     const state = ref({
       error: '',
       user,
       loading: false,
       listOfReports,
+      listOfAssignments,
+      assignmentButtonClass: 'btn-warning',
+      reportButtonClass: 'btn-primary',
+      titleState: 'Assignments',
+      query: null,
     });
     console.log(user);
+    function toggleAssignments() {
+      state.value.assignmentButtonClass = 'btn-warning';
+      state.value.reportButtonClass = 'btn-primary';
+      state.value.titleState = 'Assignments';
+    }
+    function toggleReports() {
+      state.value.assignmentButtonClass = 'btn-primary';
+      state.value.reportButtonClass = 'btn-warning';
+      state.value.titleState = 'Reports';
+    }
+    function search() {
+      axios.post('http://127.0.0.1:3000/api/assignment/search',
+        { query: state.value.query, institution: state.value.user.institution }).then((res) => {
+        console.log(res);
+      });
+    }
     return {
       state,
       getReports,
+      toggleAssignments,
+      toggleReports,
+      search,
     };
   },
 };
