@@ -10,7 +10,7 @@ export const ReportModule = {
   // Mutations are functions that effect the STATE.
   mutations: {
     SET_REPORT(state, report) {
-      state.report = report;
+      state.singleReport = report;
     },
     SET_LIST_OF_REPORTS(state, listOfReports) {
       state.listOfReports = listOfReports;
