@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const axios = require("axios");
-const cheerio = require("cheerio");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -11,12 +10,11 @@ app.use(cors({origin: [
 ],credentials: true,
   exposedHeaders: ['set-cookie']}));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json())
-let LocalStrategy = require("passport-local"),
-  passport = require("passport"),
-  User = require("./models/user"),
-  passportLocalMongoose = require("passport-local-mongoose");
-// const user = require("./models/user");
+app.use(bodyParser.json());
+let LocalStrategy = require("passport-local");
+passport = require("passport");
+User = require("./models/user");
+passportLocalMongoose = require("passport-local-mongoose");
 const report = require("./models/report");
 // setup sessions
 app.use(
@@ -44,12 +42,14 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 const userRoute = require('./routes/user')
 const reportRoute = require('./routes/report')
+const assignmentRoute = require('./routes/assignment')
 app.get("/", (req, res) => {
   res.send("GET")
 });
 
 app.use('/api/user', userRoute);
 app.use('/api/report', reportRoute)
+app.use('/api/assignment', assignmentRoute);
 app.post('/api/addreport', (req,res)=>{
   console.log(req.body)
   rep = new report(req.body);
