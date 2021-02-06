@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const passportLocalMongoose = require("passport-local-mongoose");
+const assignment = require("./assignment");
 const user = new schema({
   name: { type: String },
   email: { type: String },
@@ -8,7 +9,8 @@ const user = new schema({
   accType: { type: String },
   active: { type: Boolean },
   institution: { type: String },
-  reports: [{ type: mongoose.Schema.Types.ObjectId, ref: 'report' }]
+  reports: [{ type: mongoose.Schema.Types.ObjectId, ref: 'report' }],
+  assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'assignment' }]
 });
 user.plugin(passportLocalMongoose, {
   usernameField: "email",
