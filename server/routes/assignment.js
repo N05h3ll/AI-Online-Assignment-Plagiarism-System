@@ -83,11 +83,26 @@ router.post('/search', utils.isLoggedIn, (req, res) => {
 			authorInstitution: req.body.institution
 		}]
 	})
-    .exec(function (err, docs) {
-    console.log(docs)
-});
+		.exec(function (err, assignments) {
+			if (err) {
+				res.status(500).send("Internal Server Error!");
+			}else if (assignments.length == 0) {
+				res.status(404).send("No Results Found");
+			} else if (assignments.length !== 0) {
+				res.status(200).send(assignments);
+			}
+		});
 })
 
-
+router.get('/getassignment/:assid', utils.isLoggedIn, async (req, res) => {
+  await Assignment.findById(req.params.assid, (error, assignment) => {
+		if (error) {
+			console.log(error)
+      // res.status(500).send('Internal Server Error !')
+    } else if (assignment) {
+      res.status(200).send(assignment)
+    }
+  })
+})
 
 module.exports = router
