@@ -1,4 +1,39 @@
 <template>
+<div
+class="d-flex justify-content-center spinner"
+v-if="state.user && (state.searchResult || state.searchError)">
+  <button type="button" class="btn-close" aria-label="Close" @click="close"></button>
+  <div class="align-self-center h1" v-if="state.searchError">{{ state.searchError }}</div>
+    <div class="table-responsive mt-lg-5 w-100 overflow-scroll" v-if="state.searchResult">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Code</th>
+          <th scope="col">Due Date</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="result in state.searchResult" :key="result">
+          <td>{{ result.name }}</td>
+          <td>{{ result.code }}</td>
+          <td>{{ result.dueDate.split("T")[0] }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              @click="getAssignment(result._id)"
+            >
+              View
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- END LOADING SPINNERS -->
 <div class="container-fluid ">
   <div v-if="!state.user">
     <!--welcome-->
@@ -214,8 +249,13 @@ export default {
       reportButtonClass: 'btn-primary',
       titleState: 'Assignments',
       query: null,
+      searchResult: null,
+      searchError: null,
     });
-    console.log(user);
+    function close() {
+      state.value.searchResult = null;
+      state.value.searchError = null;
+    }
     function toggleAssignments() {
       state.value.assignmentButtonClass = 'btn-warning';
       state.value.reportButtonClass = 'btn-primary';
@@ -227,9 +267,14 @@ export default {
       state.value.titleState = 'Reports';
     }
     function search() {
+      if (state.value.query) {
       axios.post('http://127.0.0.1:3000/api/assignment/search',
         { query: state.value.query, institution: state.value.user.institution }).then((res) => {
-        console.log(res);
+          state.value.searchError = null;
+          state.value.searchResult = res.data;
+        }).catch((error) => {
+          state.value.searchResult = null;
+          state.value.searchError = error.response.data;
       });
     }
     return {
