@@ -2,9 +2,14 @@
 <div>
 <div class="container" id="middleContainer">
     <div class="row">
-
         <div class="col rounded me-sm-3" id="registerationFormContanier">
             <h2 class="h2 m-3 text-dark">Create a new assignment</h2>
+     <div class="alert alert-warning" role="alert" v-if='state.error'>
+      {{state.error}}
+    </div>
+    <div class="alert alert-success" role="alert" v-if='state.response'>
+      {{state.response}}
+    </div>
             <form class="m-3" @submit.prevent="allocate">
             <div class="form-floating mb-3">
                 <input type="text"
@@ -49,6 +54,7 @@ import Editor from '@tinymce/tinymce-vue';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
@@ -58,12 +64,15 @@ export default {
   setup() {
     const store = useStore();
     const User = computed(() => store.state.User.user);
+    const router = useRouter();
     const state = ref({
       User,
       content: null,
       name: null,
       date: null,
       customID: null,
+      error: null,
+      response: null,
     });
     function allocate() {
       const assigmentDate = new URLSearchParams();
@@ -73,14 +82,21 @@ export default {
       assigmentDate.append('description', state.value.content);
       // eslint-disable-next-line no-underscore-dangle
       assigmentDate.append('authorID', state.value.User._id);
+      assigmentDate.append('authorName', state.value.User.name);
       assigmentDate.append('authorInstitution', state.value.User.institution);
       const config = {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       };
-      axios.post('http://127.0.0.1:3000/api/assignment/addassignment', assigmentDate, config).then((res) => {
-        console.log(res);
+      axios.post('http://127.0.0.1:3000/api/assignment/addassignment', assigmentDate, config).then(async (res) => {
+        state.value.error = null;
+        state.value.response = res.data;
+        await setTimeout(() => {
+          router.push({ name: 'Home' });
+        }, 3000);
+      }).catch((error) => {
+        state.value.error = error.response.data;
       });
     }
 
