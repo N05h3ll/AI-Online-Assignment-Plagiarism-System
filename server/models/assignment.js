@@ -7,6 +7,7 @@ const assignmentSchema = new schema({
     description: {type: String},
     authorID: { type: mongoose.Schema.Types.ObjectId },
     authorInstitution: { type: String },
+    authorName: { type: String },
     submittedStudentID: {type: mongoose.Schema.Types.ObjectId}
 });
 

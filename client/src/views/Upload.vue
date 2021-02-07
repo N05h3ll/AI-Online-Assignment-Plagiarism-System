@@ -94,7 +94,7 @@ export default {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.8)  center center no-repeat;
+    background: rgba(255, 255, 255, 0.9)  center center no-repeat;
 }
 
 </style>

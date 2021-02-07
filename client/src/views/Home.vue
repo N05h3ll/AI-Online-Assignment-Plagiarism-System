@@ -116,7 +116,7 @@ v-if="state.user && (state.searchResult || state.searchError)">
             </div>
             <div class="col rounded me-sm-3" id="registerationFormContanier">
               <h2 class="h2 m-3 text-dark">{{state.titleState}}</h2>
-              <div class="table-responsive" v-if="state.titleState == 'Reports'">
+              <div class="table-responsive overflow-scroll" v-if="state.titleState == 'Reports'">
                 <table class="table">
                   <thead>
                     <tr>
@@ -164,7 +164,6 @@ v-if="state.user && (state.searchResult || state.searchError)">
                 <button
                   class="btn btn-lg btn-warning"
                   type="button"
-                  onclick="location.href='Assignments.html'"
                 >
                   Assignments
                 </button>
@@ -172,24 +171,26 @@ v-if="state.user && (state.searchResult || state.searchError)">
             </div>
             <div class="col rounded me-sm-3" id="registerationFormContanier">
               <h2 class="h2 m-3 text-dark">Assignments</h2>
-              <div class="table-responsive">
+              <div class="table-responsive overflow-scroll">
                 <table class="table">
                   <thead>
                     <tr>
                       <th scope="col">Name</th>
                       <th scope="col">Code</th>
+                      <th scope="col">Due Date</th>
                       <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="assigment in state.listOfAssignments" :key="assigment">
-                      <td>{{ assigment.name }}</td>
-                      <td>{{ assigment.code }}</td>
+                    <tr v-for="assignment in state.listOfAssignments" :key="assignment">
+                      <td>{{ assignment.name }}</td>
+                      <td>{{ assignment.code }}</td>
+                      <td>{{ assignment.dueDate.split("T")[0] }}</td>
                       <td>
                         <button
                           type="button"
                           class="btn btn-primary btn-sm"
-                          @click="getReports(assignment._id)"
+                          @click="getAssignment(assignment._id)"
                         >
                           View
                         </button>
@@ -201,9 +202,11 @@ v-if="state.user && (state.searchResult || state.searchError)">
             </div>
           </div>
         </div>
+        <div>
     <router-link :to="{ name: 'AddAssignment' }">
     <button class="btn btn-success float-end m-lg-5">Allocate a new assignment</button>
     </router-link>
+        </div>
       </div>
     </div>
 </div>
@@ -224,11 +227,9 @@ export default {
     if (user.value) {
       const store = useStore();
       axios.get('http://127.0.0.1:3000/api/report/getallreports').then((res) => {
-        console.log(res.data);
         store.dispatch('Report/setListOfReports', res.data);
       });
       axios.get('http://127.0.0.1:3000/api/assignment/getallassignments').then((res) => {
-        console.log(res.data);
         store.dispatch('Assignment/setListOfAssignments', res.data);
       });
     }
@@ -238,6 +239,10 @@ export default {
     function getReports(reportID) {
       // console.log(reportID);
       router.push({ name: 'Report', params: { repid: reportID } });
+    }
+    function getAssignment(assignmentID) {
+      // console.log(assignmentID);
+      router.push({ name: 'Assignment', params: { assid: assignmentID } });
     }
     const state = ref({
       error: '',
@@ -268,14 +273,15 @@ export default {
     }
     function search() {
       if (state.value.query) {
-      axios.post('http://127.0.0.1:3000/api/assignment/search',
-        { query: state.value.query, institution: state.value.user.institution }).then((res) => {
+        axios.post('http://127.0.0.1:3000/api/assignment/search',
+          { query: state.value.query, institution: state.value.user.institution }).then((res) => {
           state.value.searchError = null;
           state.value.searchResult = res.data;
         }).catch((error) => {
           state.value.searchResult = null;
           state.value.searchError = error.response.data;
-      });
+        });
+      }
     }
     return {
       state,
@@ -283,7 +289,15 @@ export default {
       toggleAssignments,
       toggleReports,
       search,
+      getAssignment,
+      close,
     };
   },
 };
 </script>
+
+<style scoped>
+.table-responsive {
+  max-height: 50vh;
+}
+</style>
