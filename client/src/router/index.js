@@ -6,6 +6,7 @@ import Login from '../views/Login.vue';
 import AddAssignment from '../views/AddAssignment.vue';
 import Upload from '../views/Upload.vue';
 import Report from '../views/Report.vue';
+import Assignment from '../views/Assignment.vue';
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     path: "/AddAssignment",
     name: 'AddAssignment',
     component: AddAssignment,
+  },
+  {
+    path: "/Assignment/:assid",
+    name: 'Assignment',
+    component: Assignment,
   },
 ];
 
