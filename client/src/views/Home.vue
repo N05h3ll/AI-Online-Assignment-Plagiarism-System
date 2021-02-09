@@ -226,12 +226,22 @@ export default {
   mounted() {
     if (user.value) {
       const store = useStore();
+      setInterval(() => {
       axios.get('http://127.0.0.1:3000/api/report/getallreports').then((res) => {
         store.dispatch('Report/setListOfReports', res.data);
+        }).catch((error) => {
+          console.log(error.response.data);
+          store.dispatch('Report/setListOfReports', null);
       });
+      }, 10000);
+      setInterval(() => {
       axios.get('http://127.0.0.1:3000/api/assignment/getallassignments').then((res) => {
         store.dispatch('Assignment/setListOfAssignments', res.data);
+        }).catch((error) => {
+          console.log(error.response.data);
+          store.dispatch('Assignment/setListOfAssignments', null);
       });
+      }, 10000);
     }
   },
   setup() {
