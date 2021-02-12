@@ -50,21 +50,7 @@ app.get("/", (req, res) => {
 app.use('/api/user', userRoute);
 app.use('/api/report', reportRoute)
 app.use('/api/assignment', assignmentRoute);
-app.post('/api/addreport', (req,res)=>{
-  console.log(req.body)
-  rep = new report(req.body);
 
-  rep.save((err, report) => {
-    if (err) {console.log(err)}
-    // console.log(report)
-    // console.log(report)
-    User.findOneAndUpdate({email: req.body.email}, {$push: {reports: report._id}}, (err)=>{
-      if(err){console.log(err)}
-      res.send('done')
-    })
-  });
-
-})
 app.listen(3000, () => {
   console.log("app listining on 127.0.0.1:3000");
 });

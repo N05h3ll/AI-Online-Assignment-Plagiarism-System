@@ -3,6 +3,7 @@ const router = express.Router()
 const utils = require('../utils')
 const User = require('../models/user')
 const Report = require('../models/report')
+const Assignment = require('../models/assignment')
 let nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -42,7 +43,6 @@ router.get('/emailreport/:repid', utils.isLoggedIn, async (req, res) => {
     if (error) {
       res.status(500).send('Intrenal Server Error !');
     } else {
-      console.log(report)
       let mailOptions = {
               from: 'no.reply.oaps@gmail.com',
               to: req.session.passport.user,
@@ -77,6 +77,46 @@ router.get('/emailreport/:repid', utils.isLoggedIn, async (req, res) => {
             });
     }
   })
+})
+router.post('/addreport', (req,res)=>{
+  console.log(req.body)
+  rep = new Report(req.body);
+
+  rep.save((err, report) => {
+    if (err) {console.log(err)}
+    // console.log(report)
+    // console.log(report)
+    User.findOneAndUpdate({email: req.body.email},
+      {
+        $push: {
+          reports: report._id,
+          submittedAssignments: {
+            assignmentID: req.body.assignmentID,
+            assignmentName: req.body.assignmentName,
+            assignmentCode: req.body.assignmentCode,
+            submissionDate: report.uploadDate,
+            status: report.status
+          }
+        }
+      }, (err, user) => {
+        if (err) { console.log(err) }
+        Assignment.findByIdAndUpdate(report.assignmentID, {
+          $push: {
+            submittedStudents: {
+              studentdID: user._id,
+              studentdName: user.name,
+              submissionDate: report.uploadDate,
+              status: report.status,
+              reportID: report._id
+            }
+          }
+        }, (err) => {
+            if(err){console.log(err)}
+          res.send('done')
+        })
+    })
+  });
+
 })
 
 module.exports = router
