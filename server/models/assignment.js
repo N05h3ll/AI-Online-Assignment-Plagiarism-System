@@ -8,7 +8,13 @@ const assignmentSchema = new schema({
     authorID: { type: mongoose.Schema.Types.ObjectId },
     authorInstitution: { type: String },
     authorName: { type: String },
-    submittedStudentID: {type: mongoose.Schema.Types.ObjectId}
+    submittedStudents: [{
+        studentdID: { type: mongoose.Schema.Types.ObjectId },
+        studentdName: { type: String },
+        submissionDate: { type: String},
+        status: { type: String },
+        reportID: { type: mongoose.Schema.Types.ObjectId }
+    }]
 });
 
 const assignment = mongoose.model('assignment', assignmentSchema);

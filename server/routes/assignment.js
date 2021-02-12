@@ -57,19 +57,21 @@ router.post('/addassignment', utils.isLoggedIn, (req, res) => {
 })
 
 router.get('/getallassignments', utils.isLoggedIn, async (req, res) => {
-  console.log(req.session.passport.user)
   await User.findOne({ email: req.session.passport.user }, async (err, user) => {
     if (err) {
       res.status(500).send("internal server error! " + error);
-    } else if (user) {
-      await Assignment.find({ _id: { $in: user.assignments } }, (error, assignments) => {
-        if (error) {
-          res.status(500).send("internal server error! " + error);
-        } else if (assignments) {
-          res.send(assignments)
-        }
-      })
-      
+		} else if (user) {
+			if (user.accType == 'Student') {
+				res.send(user.submittedAssignments)
+			} else if (user.accType == 'Module Coordinator') {
+				await Assignment.find({ _id: { $in: user.assignments } }, (error, assignments) => {
+				  if (error) {
+				    res.status(500).send("internal server error! " + error);
+				  } else if (assignments) {
+						res.send(assignments)
+				  }
+				})
+			}
     }
   })
 })
@@ -95,14 +97,49 @@ router.post('/search', utils.isLoggedIn, (req, res) => {
 })
 
 router.get('/getassignment/:assid', utils.isLoggedIn, async (req, res) => {
-  await Assignment.findById(req.params.assid, (error, assignment) => {
+  Assignment.findById(req.params.assid, (error, assignment) => {
 		if (error) {
-			console.log(error)
-      // res.status(500).send('Internal Server Error !')
-    } else if (assignment) {
+      res.status(500).send('Internal Server Error !')
+		} else if (assignment) {
       res.status(200).send(assignment)
     }
   })
 })
+router.get('/:assid/getsubmittedstudents', utils.isLoggedIn, (req, res) => {
+	Assignment.findById(req.params.assid, (error, students) => {
+		if (error) {
+			res.status(500).send('Internal Server Error!')
+		} else if (students.submittedStudents.length == 0) {
+			res.status(404).send("No Submissions Yet ...");
+		} else if (students.submittedStudents.length !== 0) {
 
+			res.status(200).send(students.submittedStudents)
+		}
+	})
+})
+router.get('/:assid/issubmitted', utils.isLoggedIn, (req, res) => {
+	// console.log(req.params.assid)
+	Assignment.findById(req.params.assid, (error, assignment) => {
+		if (error) {
+			res.status(500).send("Internal Server Error")
+		} else if (assignment) {
+			
+			Assignment.findOne({
+				$and: [
+					{ 'submittedStudents.studentdID': { $in: assignment.submittedStudents.map(x => x.studentdID) } },
+					{'submittedStudents.studentdID': {$ne: 'Second Trial'}}
+				]
+			}, (error, result) => {
+					if (error) {
+						res.status(500).send("Internal Server Error!")
+					} else if (!result) {
+						res.status(200).send();
+					} else if (result) {
+						res.status(403).send()
+					}
+					
+			})
+		}
+	})
+})
 module.exports = router

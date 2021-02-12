@@ -34,7 +34,7 @@
 <script>
 import { ref, computed } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 // const store = useStore();
@@ -50,27 +50,29 @@ export default {
     }
   },
   setup() {
-    // const store = useStore();
-    // const user = computed(() => store.state.User.user);
+    const store = useStore();
+    const route = useRoute();
     const state = ref({
       error: '',
       user: user.value,
       loading: false,
-
+      Assignment: computed(() => store.state.Assignment.singleAssignment),
     });
+    console.log(state.value.Assignment.data);
     const file = ref(null);
-
     async function upload() {
       if (file.value.files.length === 0) {
         state.value.error = 'Please submit a file!';
         return;
       }
-      // console.log(file.value.files);
       state.value.loading = true;
       const form = new FormData();
       form.append('file', file.value.files[0]);
       form.append('user', state.value.user.email);
       form.append('name', state.value.user.name);
+      form.append('assignmentID', route.params.assid);
+      form.append('assignmentName', state.value.Assignment.data.name);
+      form.append('assignmentCode', state.value.Assignment.data.code);
       axios.post('http://127.0.0.1:5000', form, {
         headers: {
           'Content-Type': 'multipart/form-data',

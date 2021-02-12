@@ -75,25 +75,26 @@ v-if="state.user && (state.searchResult || state.searchError)">
             <div class="col">
               <div class="d-grid gap-3 col-5 ">
                 <button
-                  v-bind:class="'btn btn-lg '+ state.reportButtonClass"
-                  type="button"
-                  @click="toggleReports"
-                >
-                  Reports
-                </button>
-                <button
                   v-bind:class="'btn btn-lg '+ state.assignmentButtonClass"
                   type="button"
                   @click="toggleAssignments"
                 >
                   Assigment
                 </button>
+                <button
+                  v-bind:class="'btn btn-lg '+ state.reportButtonClass"
+                  type="button"
+                  @click="toggleReports"
+                >
+                  Reports
+                </button>
               </div>
             </div>
             <div class="col rounded me-sm-3" id="registerationFormContanier">
               <h2 class="h2 m-3 text-dark">{{state.titleState}}</h2>
-              <div class="table-responsive overflow-scroll" v-if="state.titleState == 'Reports'">
-                <table class="table">
+              <div class="table-responsive overflow-scroll">
+                <!-- Reports TABLE -->
+                <table class="table" v-if="state.titleState == 'Reports'">
                   <thead>
                     <tr>
                       <th scope="col">Name</th>
@@ -103,13 +104,13 @@ v-if="state.user && (state.searchResult || state.searchError)">
                   </thead>
                   <tbody>
                     <tr v-for="report in state.listOfReports" :key="report">
-                      <td>A340 Survey</td>
-                      <td>SW125-Assignemnt2</td>
+                      <td>{{report.assignmentName}}</td>
+                      <td>{{report.assignmentCode}}</td>
                       <td>
                         <button
                           type="button"
                           class="btn btn-primary btn-sm"
-                          @click="getReports(report._id)"
+                          @click="getReport(report._id)"
                         >
                           View
                         </button>
@@ -117,14 +118,45 @@ v-if="state.user && (state.searchResult || state.searchError)">
                     </tr>
                   </tbody>
                 </table>
+                <!-- END REPORTS TABLE -->
+                <!-- ASSIGNMENT TABLE -->
+                <table class="table" v-if="state.titleState == 'Assignments'">
+                  <thead>
+                    <tr>
+                      <th scope="col">Status</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Code</th>
+                      <th scope="col">Submission Date</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="assignment in state.listOfAssignments" :key="assignment">
+                      <td class="badge bg-success mt-sm-2"
+                      v-if="assignment.status == 'Passed'">{{assignment.status}}</td>
+                      <td class="badge bg-danger mt-sm-2"
+                      v-if="assignment.status == 'Failed'">{{assignment.status}}</td>
+                      <td>{{assignment.assignmentName}}</td>
+                      <td>{{assignment.assignmentCode}}</td>
+                      <td>{{assignment.submissionDate}}</td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-primary btn-sm"
+                          @click="getAssignment(assignment.assignmentID)"
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- END ASSIGNMENT TABLE -->
               </div>
             </div>
           </div>
         </div>
         <div>
-          <router-link :to="{ name: 'Upload' }">
-    <button class="btn btn-success float-end m-lg-5">Upload New Document</button>
-    </router-link>
           </div>
       </div>
     </div>
@@ -146,12 +178,17 @@ export default {
       required: true,
       type: Array,
     },
+    listOfAssignments: {
+      required: true,
+      type: Array,
+    },
   },
   setup(props) {
     const router = useRouter();
     const state = ref({
       user: computed(() => props.user),
       listOfReports: computed(() => props.listOfReports),
+      listOfAssignments: computed(() => props.listOfAssignments),
       assignmentButtonClass: 'btn-warning',
       reportButtonClass: 'btn-primary',
       titleState: 'Assignments',
@@ -159,6 +196,7 @@ export default {
       searchResult: null,
       searchError: null,
     });
+    console.log(state.value.listOfAssignments);
     function close() {
       state.value.searchResult = null;
       state.value.searchError = null;
@@ -189,6 +227,10 @@ export default {
       // console.log(assignmentID);
       router.push({ name: 'Assignment', params: { assid: assignmentID } });
     }
+    function getReport(repID) {
+      // console.log(assignmentID);
+      router.push({ name: 'Report', params: { repid: repID } });
+    }
     return {
       state,
       toggleAssignments,
@@ -196,6 +238,7 @@ export default {
       search,
       close,
       getAssignment,
+      getReport,
     };
   },
 };

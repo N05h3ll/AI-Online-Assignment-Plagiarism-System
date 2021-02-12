@@ -6,8 +6,12 @@ const reportSchema = new schema({
   email: { type: String },
   uploadDate: { type: String },
   totalPercentage: { type: mongoose.Schema.Types.Decimal128 },
+  status: { type: String },
   isSecondTrial: { type: Boolean },
   fileName: { type: String },
+  assignmentName: { type: String },
+  assignmentCode: { type: String },
+  assignmentID: { type: String },
   baseParagraph: 
     {
       type: [{

@@ -10,7 +10,16 @@ const user = new schema({
   active: { type: Boolean },
   institution: { type: String },
   reports: [{ type: mongoose.Schema.Types.ObjectId, ref: 'report' }],
-  assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'assignment' }]
+  assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'assignment' }],
+  submittedAssignments: [
+    {
+      assignmentID: { type: mongoose.Schema.Types.ObjectId },
+      submissionDate: { type: String },
+      status: { type: String },
+      assignmentName: { type: String },
+      assignmentCode: { type: String },
+    }
+  ]
 });
 user.plugin(passportLocalMongoose, {
   usernameField: "email",

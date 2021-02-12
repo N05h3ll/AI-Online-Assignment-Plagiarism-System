@@ -25,7 +25,7 @@ const routes = [
     component: Login,
   },
   {
-    path: "/upload",
+    path: "/upload/:assid",
     name: "Upload",
     component: Upload,
   },

@@ -30,7 +30,7 @@
 <module-coordinator v-if="state.user && state.user.accType == 'Module Coordinator'"
 :user="state.user" :listOfAssignments="state.listOfAssignments"/>
 <student v-if="state.user && state.user.accType == 'Student'" :user="state.user"
-:listOfReports="state.listOfReports" />
+:listOfReports="state.listOfReports" :listOfAssignments="state.listOfAssignments" />
 </div>
 </template>
 
@@ -54,28 +54,34 @@ export default {
   mounted() {
     if (user.value) {
       const store = useStore();
-      setInterval(() => {
+
+      // eslint-disable-next-line no-inner-declarations
+      (function getAllReports() {
         axios.get('http://127.0.0.1:3000/api/report/getallreports').then((res) => {
           store.dispatch('Report/setListOfReports', res.data);
         }).catch((error) => {
           console.log(error.response.data);
           store.dispatch('Report/setListOfReports', null);
         });
-      }, 10000);
-      setInterval(() => {
+        setTimeout(getAllReports, 30000);
+      }());
+
+      // eslint-disable-next-line no-inner-declarations
+      (function getAllAssignments() {
         axios.get('http://127.0.0.1:3000/api/assignment/getallassignments').then((res) => {
           store.dispatch('Assignment/setListOfAssignments', res.data);
+          // console.log(res.data);
         }).catch((error) => {
           console.log(error.response.data);
           store.dispatch('Assignment/setListOfAssignments', null);
         });
-      }, 10000);
+        setTimeout(getAllAssignments, 30000);
+      }());
     }
   },
   setup() {
     const router = useRouter();
     function getReports(reportID) {
-      // console.log(reportID);
       router.push({ name: 'Report', params: { repid: reportID } });
     }
     const state = ref({
