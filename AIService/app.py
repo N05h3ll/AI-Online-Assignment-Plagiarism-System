@@ -111,14 +111,18 @@ def index():
             responseObject = {}
             responseObject['author'] = request.values['name']
             responseObject['totalPercentage'] = totalPercentage
+            responseObject['status'] = 'Passed' if totalPercentage >= 50 else 'Failed'
             responseObject['uploadDate'] = datetime.now().strftime("%d/%m/%Y %H:%M")
             responseObject['fileName'] = file.filename
             responseObject['isSecondTrial'] = True
             responseObject['baseParagraph'] = baseParagraphList
             responseObject['email'] = request.values['user']
+            responseObject['assignmentID'] = request.values['assignmentID']
+            responseObject['assignmentName'] = request.values['assignmentName']
+            responseObject['assignmentCode'] = request.values['assignmentCode']
             reportJson = json.loads(json.dumps(responseObject, indent=2))
             print(reportJson)
-            res = requests.post('http://127.0.0.1:3000/api/addreport', json=reportJson)
+            res = requests.post('http://127.0.0.1:3000/api/report/addreport', json=reportJson)
             
             return 'DONE'
     return "GET Response"
