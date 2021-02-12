@@ -77,7 +77,6 @@ export default {
       listOfAssignments: computed(() => props.listOfAssignments),
     });
     function getAssignment(assignmentID) {
-      // console.log(assignmentID);
       router.push({ name: 'Assignment', params: { assid: assignmentID } });
     }
     return {

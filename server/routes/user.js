@@ -106,13 +106,13 @@ router.post("/login", function (req, res, next) {
 
 
 router.get('/user', utils.isLoggedIn, async (req,res)=>{
-  // console.log(req.session.passport.user)
+  
   let user = await User.findOne({email: req.session.passport.user}, (err, user)=>{
     if (err){return err}else if(user){
       return user
     }
   })
-  console.log(user)
+  
   res.send(user)
 })
 
