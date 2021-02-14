@@ -1,11 +1,52 @@
 <template>
 <!-- LAODING SPINNERS -->
-<div class="d-flex justify-content-center spinner" v-if="state.loading">
-  <div class="spinner-grow align-self-center text-primary" role="status"></div>
+<div class="spinner "  v-if="state.loading">
+<div class="d-flex justify-content-center">
+  <div id="carouselExampleSlidesOnly" class="carousel slide mt-3" data-bs-ride="carousel">
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="5000">
+      <img src="../../public/11.jpg" class="d-block" alt="...">
+      <div class="carousel-caption d-none d-md-block bg-dark">
+        <h5>First slide label</h5>
+        <p>Some representative placeholder content for the first slide.</p>
+      </div>
+    </div>
+    <div class="carousel-item" data-bs-interval="5000">
+      <img src="../../public/12.jpg" class="d-block" alt="...">
+      <div class="carousel-caption d-none d-md-block bg-dark">
+        <h5>First slide label</h5>
+        <p>Some representative placeholder content for the first slide.</p>
+      </div>
+    </div>
+    <div class="carousel-item" data-bs-interval="5000">
+      <img src="../../public/15.jpg" class="d-block" alt="...">
+      <div class="carousel-caption d-none d-md-block bg-dark">
+        <h5>First slide label</h5>
+        <p>Some representative placeholder content for the first slide.</p>
+      </div>
+    </div>
+  </div>
+  <a class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+  data-bs-slide="prev" role="button">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </a>
+  <a class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+  data-bs-slide="next" role="button">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </a>
+</div>
+  </div>
+</div>
+  <div class="d-flex justify-content-center mt-2">
+   <div class="spinner-grow align-self-center text-primary" role="status"></div>
   <div class="spinner-grow align-self-center text-secondary" role="status"></div>
   <div class="spinner-grow align-self-center text-success" role="status"></div>
   <div class="spinner-grow align-self-center text-danger" role="status"></div>
-  <div class="align-self-center mx-2">Checking Your Document ...</div>
+  <div class="align-self-center mx-2">PLease wait, while checking your document ...</div>
+  </div>
 </div>
 <!-- END LOADING SPINNERS -->
   <div class="container" id="middleContainer">
