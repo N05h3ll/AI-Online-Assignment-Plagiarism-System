@@ -64,7 +64,8 @@ v-if="state.user.accType == 'Module Coordinator'
       v-if="state.user.accType == 'Student'
       && state.submitted" @click="submit">Submit</button>
       <h3 class="alert alert-warning"
-      v-if="!state.submitted && state.user.accType == 'Student'">You have already submitted this assignemnt.</h3>
+      v-if="!state.submitted &&
+      state.user.accType == 'Student'">You have already submitted this assignemnt.</h3>
       </div>
       <div class="row"><button class="btn btn-primary"
       v-if="state.user.accType == 'Module Coordinator'"
