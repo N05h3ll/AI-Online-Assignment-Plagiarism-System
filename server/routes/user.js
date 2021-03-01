@@ -109,7 +109,7 @@ router.post("/login", function (req, res, next) {
       res.status(401).send('NO USER FOUND!')
     } else if (found) {
        return res.status(200).send({ success: "TRUE", user: found });
-      }
+    }
   })
       }
     });
@@ -132,8 +132,6 @@ router.get('/user', utils.isLoggedIn, async (req,res)=>{
       res.send(user)
     }
   })
-  
-  res.send(user)
 })
 
 router.get('/logout', (req, res)=>{
@@ -141,6 +139,22 @@ router.get('/logout', (req, res)=>{
   req.logout();
   res.send()
 })
-
+router.get('/gettas', utils.isLoggedIn, (req, res) => {
+  User.find({
+    $and: [
+      { institution: req.user.institution },
+      { accType: 'Teacher Assistant' },
+      { active: true }
+    ]
+  }).exec((error, TAs) => {
+    if (error) {
+      res.status(500).send('Internal Server Error!')
+    } else if (TAs.length !== 0) {
+      res.status(200).send(TAs)
+    } else if (TAs.length == 0) {
+      res.status(404).send('No Teacher Assistants Available')
+    }
+  })
+ })
 
 module.exports = router;
