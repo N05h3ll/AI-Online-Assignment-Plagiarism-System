@@ -94,22 +94,42 @@ router.post("/login", function (req, res, next) {
       res
         .status(401)
         .send({ error: "Incorrect email or passowrd, Please try again." });
-    }
-    req.logIn(user, function (err) {
+    } else {
+    req.logIn(user, async function (err) {
       if (err) {
-        return next(err);
+        return res.status(401).send('Eror while loging you in, please try again later.')
+      } else if (!err) {
+          await User.findOne({ email: user.email }).
+    populate('assignments').
+    populate('reports').
+    populate('submittedAssignments').populate('createdCourses').
+    populate('enrolledCourses').
+    exec((error, found) => {
+    if (error) {
+      res.status(401).send('NO USER FOUND!')
+    } else if (found) {
+       return res.status(200).send({ success: "TRUE", user: found });
       }
-      return res.status(200).send({ success: "TRUE", user: user });
+  })
+      }
     });
+  }
   })(req, res, next);
 });
 
 
 router.get('/user', utils.isLoggedIn, async (req,res)=>{
-  
-  let user = await User.findOne({email: req.session.passport.user}, (err, user)=>{
-    if (err){return err}else if(user){
-      return user
+  console.log(req.session.passport.user);
+  await User.findOne({ email: req.session.passport.user }).
+    populate('assignments').
+    populate('reports').
+    populate('submittedAssignments').populate('createdCourses').
+    populate('enrolledCourses').
+    exec((error, user) => {
+    if (error) {
+      res.status(401).send('NO USER FOUND!')
+    } else if (user) {
+      res.send(user)
     }
   })
   
