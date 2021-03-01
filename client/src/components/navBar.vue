@@ -29,7 +29,7 @@
 </template>
 <script>
 import axios from 'axios';
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -40,10 +40,16 @@ export default {
     const state = ref({
       user: computed(() => store.state.User.user),
     });
-    async function getUser() {
-      await axios.get('http://127.0.0.1:3000/api/user/user').then((res) => { store.dispatch('User/setUser', res.data); }).catch(() => { store.dispatch('User/setUser', null); });
-    }
-    onMounted(getUser);
+    (async function getUser() {
+      await axios.get('http://127.0.0.1:3000/api/user/user').then((res) => {
+        console.log(res.data);
+        store.dispatch('User/setUser', res.data);
+      }).catch(() => {
+        store.dispatch('User/setUser', null);
+        router.push({ name: 'Home' });
+      });
+      setTimeout(getUser, 30000);
+    }());
     async function logout() {
       await axios.get('http://127.0.0.1:3000/api/user/logout').then(() => {
         store.dispatch('User/setUser', null);
@@ -52,7 +58,6 @@ export default {
     }
     return {
       state,
-      getUser,
       logout,
     };
   },
