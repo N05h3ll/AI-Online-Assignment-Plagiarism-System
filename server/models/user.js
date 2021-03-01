@@ -11,9 +11,11 @@ const user = new schema({
   institution: { type: String },
   reports: [{ type: mongoose.Schema.Types.ObjectId, ref: 'report' }],
   assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'assignment' }],
+  createdCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'course' }],
+  enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'course' }],
   submittedAssignments: [
     {
-      assignmentID: { type: mongoose.Schema.Types.ObjectId },
+      assignmentID: { type: mongoose.Schema.Types.ObjectId, ref: 'assignment' },
       submissionDate: { type: String },
       status: { type: String },
       assignmentName: { type: String },

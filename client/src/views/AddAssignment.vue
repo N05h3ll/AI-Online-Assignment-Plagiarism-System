@@ -61,7 +61,13 @@ export default {
     // eslint-disable-next-line quote-props
     'editor': Editor,
   },
-  setup() {
+  props: {
+    courseID: {
+      required: true,
+      type: String,
+    },
+  },
+  setup(props) {
     const store = useStore();
     const User = computed(() => store.state.User.user);
     const router = useRouter();
@@ -73,7 +79,9 @@ export default {
       customID: null,
       error: null,
       response: null,
+      courseID: computed(() => props.courseID),
     });
+    console.log(state.value.courseID);
     function allocate() {
       const assigmentDate = new URLSearchParams();
       assigmentDate.append('name', state.value.name);

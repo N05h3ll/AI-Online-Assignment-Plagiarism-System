@@ -43,6 +43,7 @@ passport.deserializeUser(User.deserializeUser());
 const userRoute = require('./routes/user')
 const reportRoute = require('./routes/report')
 const assignmentRoute = require('./routes/assignment')
+const courseRoute = require('./routes/course')
 app.get("/", (req, res) => {
   res.send("GET")
 });
@@ -50,7 +51,7 @@ app.get("/", (req, res) => {
 app.use('/api/user', userRoute);
 app.use('/api/report', reportRoute)
 app.use('/api/assignment', assignmentRoute);
-
+app.use('/api/course', courseRoute);
 app.listen(3000, () => {
   console.log("app listining on 127.0.0.1:3000");
 });
