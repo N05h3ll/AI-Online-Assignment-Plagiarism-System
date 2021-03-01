@@ -8,22 +8,24 @@
     <div class="carousel-item active" data-bs-interval="5000">
       <img src="../../public/11.jpg" class="d-block" alt="...">
       <div class="carousel-caption d-none d-md-block bg-dark">
-        <h5>First slide label</h5>
-        <p>Some representative placeholder content for the first slide.</p>
+        <h5>Why use Plagiarism checkers?</h5>
+        <p>Educates students on identifying and acknowledging other authors work.</p>
       </div>
     </div>
     <div class="carousel-item" data-bs-interval="5000">
       <img src="../../public/12.jpg" class="d-block" alt="...">
       <div class="carousel-caption d-none d-md-block bg-dark">
-        <h5>First slide label</h5>
-        <p>Some representative placeholder content for the first slide.</p>
+        <h5>Why use Plagiarism checkers?</h5>
+        <p>There can be many matches because of extensive duplications of material on the web.
+          The source named may not be the exact source that the student used.</p>
       </div>
     </div>
     <div class="carousel-item" data-bs-interval="5000">
       <img src="../../public/15.jpg" class="d-block" alt="...">
       <div class="carousel-caption d-none d-md-block bg-dark">
-        <h5>First slide label</h5>
-        <p>Some representative placeholder content for the first slide.</p>
+        <h5>Why use Plagiarism checkers?</h5>
+        <p>The similarity score is just a
+          percentage of material in the paper that matches sources in the internet and Database.</p>
       </div>
     </div>
   </div>
