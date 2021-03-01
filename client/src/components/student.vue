@@ -68,12 +68,10 @@ v-if="state.user && (state.searchResult || state.searchError)">
     <!--/search box-->
 
     <!-- STUDENT -->
-    <div class="container row" id="middleContainer">
-      <div class="row">
-        <div class="container">
-          <div class="row align-items-center">
+    <div class="container-fluid row">
+                <div class="row align-items-center">
             <div class="col">
-              <div class="d-grid gap-3 col-5 ">
+              <div class="d-grid gap-3 col-4 ">
                 <button
                   v-bind:class="'btn btn-lg '+ state.assignmentButtonClass"
                   type="button"
@@ -90,7 +88,7 @@ v-if="state.user && (state.searchResult || state.searchError)">
                 </button>
               </div>
             </div>
-            <div class="col rounded me-sm-3" id="registerationFormContanier">
+            <div class="col-10 rounded" id="registerationFormContanier">
               <h2 class="h2 m-3 text-dark">{{state.titleState}}</h2>
               <div class="table-responsive overflow-scroll">
                 <!-- Reports TABLE -->
@@ -155,10 +153,8 @@ v-if="state.user && (state.searchResult || state.searchError)">
               </div>
             </div>
           </div>
-        </div>
         <div>
-          </div>
-      </div>
+        </div>
     </div>
 
 </template>
@@ -174,21 +170,13 @@ export default {
       required: true,
       type: Object,
     },
-    listOfReports: {
-      required: true,
-      type: Array,
-    },
-    listOfAssignments: {
-      required: true,
-      type: Array,
-    },
   },
   setup(props) {
     const router = useRouter();
     const state = ref({
       user: computed(() => props.user),
-      listOfReports: computed(() => props.listOfReports),
-      listOfAssignments: computed(() => props.listOfAssignments),
+      listOfReports: computed(() => props.user.reports),
+      listOfAssignments: computed(() => props.user.submittedAssignments),
       assignmentButtonClass: 'btn-warning',
       reportButtonClass: 'btn-primary',
       titleState: 'Assignments',
@@ -196,7 +184,7 @@ export default {
       searchResult: null,
       searchError: null,
     });
-    console.log(state.value.listOfAssignments);
+
     function close() {
       state.value.searchResult = null;
       state.value.searchError = null;
