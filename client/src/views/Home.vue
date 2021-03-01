@@ -27,10 +27,8 @@
   </div>
 
 <!-- MODULE COORDINATOR -->
-<module-coordinator v-if="state.user && state.user.accType == 'Module Coordinator'"
-:user="state.user" :listOfAssignments="state.listOfAssignments"/>
-<student v-if="state.user && state.user.accType == 'Student'" :user="state.user"
-:listOfReports="state.listOfReports" :listOfAssignments="state.listOfAssignments" />
+<module-coordinator v-if="state.user && state.user.accType == 'Module Coordinator'"/>
+<student v-if="state.user && state.user.accType == 'Student'" :user="state.user" />
 </div>
 </template>
 
