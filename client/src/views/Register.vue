@@ -55,7 +55,7 @@
           <div class="mb-3">
             <select
             class="form-select"
-            aria-label="Default select example"
+            aria-label="Account Type"
             name="accType"
             v-model="state.accType"
             >
@@ -139,7 +139,7 @@ export default {
         },
       };
       axios.post('http://127.0.0.1:3000/api/user/register', registerData, config).then(() => {
-        router.push('upload');
+        router.push('Login');
       }).catch((error) => {
         state.value.error = error.response.data.error;
       });
