@@ -4,6 +4,7 @@ const utils = require('../utils')
 const User = require('../models/user')
 const Report = require('../models/report')
 const Assignment = require('../models/assignment');
+const Course = require('../models/course')
 const { NativeError } = require('mongoose');
 
 
@@ -25,7 +26,11 @@ router.post('/addassignment', utils.isLoggedIn, (req, res) => {
 						if (error) {
 							res.status(500).send("Internal Server Error!")
 						} else {
-							res.status(201).send("Assignment Created Successfully")
+							Course.findByIdAndUpdate(newAssignment.courseID, { $push: { assignments: newAssignment._id } }, (error) => {
+								if(error) {return res.status(500).send("Internal Server Error!")}
+								return res.status(201).send("Assignment Created Successfully")
+								
+							})
 						}
 					})
 				}
@@ -46,7 +51,11 @@ router.post('/addassignment', utils.isLoggedIn, (req, res) => {
 						if (error) {
 							res.status(500).send("Internal Server Error!")
 						} else {
-							res.status(201).send("Assignment Created Successfully")
+							Course.findByIdAndUpdate(newAssignment.courseID, { $push: { assignments: newAssignment._id } }, (error) => {
+								if(error) {return res.status(500).send("Internal Server Error!")}
+								return res.status(201).send("Assignment Created Successfully")
+								
+							})
 						}
 					})
 					}
