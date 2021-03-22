@@ -57,6 +57,7 @@
 <script>
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 // import axios from 'axios';
 
 export default {
@@ -67,12 +68,18 @@ export default {
     },
   },
   setup(props) {
+    const store = useStore();
     const router = useRouter();
     const state = ref({
-      course: computed(() => JSON.parse(props.course)),
+      course: computed(() => {
+        if (props.course) { return JSON.parse(props.course); }
+        return store.state.Course.course;
+      }),
       listOfAssignments: null,
     });
-    console.log(state.value.course);
+    if (!state.value.course) {
+      router.push({ name: 'Home' });
+    }
     function getAssignment(assignmentID) {
       router.push({ name: 'Assignment', params: { assid: assignmentID } });
     }
