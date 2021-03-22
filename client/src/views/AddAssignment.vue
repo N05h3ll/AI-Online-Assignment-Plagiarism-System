@@ -97,6 +97,7 @@ export default {
       // eslint-disable-next-line no-underscore-dangle
       assigmentDate.append('authorID', state.value.User._id);
       assigmentDate.append('authorName', state.value.User.name);
+      assigmentDate.append('courseID', state.value.courseID);
       assigmentDate.append('authorInstitution', state.value.User.institution);
       const config = {
         headers: {
