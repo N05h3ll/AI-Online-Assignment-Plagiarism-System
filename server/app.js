@@ -4,6 +4,7 @@ const axios = require("axios");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+var history = require('connect-history-api-fallback');
 app.use(cors({origin: [
   'http://localhost:8080',
   'http://127.0.0.1:8080'
@@ -17,6 +18,7 @@ User = require("./models/user");
 passportLocalMongoose = require("passport-local-mongoose");
 const report = require("./models/report");
 // setup sessions
+app.use(history())
 app.use(
   require("express-session")({
     secret: "OAPS Secret Token",
