@@ -79,7 +79,13 @@ export default {
       customID: null,
       error: null,
       response: null,
-      courseID: computed(() => props.courseID),
+      courseID: computed(() => {
+        if (props.courseID) {
+          return props.courseID;
+        }
+        // eslint-disable-next-line no-underscore-dangle
+        return store.state.Course.course._id;
+      }),
     });
     console.log(state.value.courseID);
     function allocate() {
