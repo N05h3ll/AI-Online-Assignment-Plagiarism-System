@@ -27,8 +27,8 @@
   </div>
 
 <!-- MODULE COORDINATOR -->
-<module-coordinator v-if="state.user && state.user.accType == 'Module Coordinator'"/>
-<student v-if="state.user && state.user.accType == 'Student'" :user="state.user" />
+<coursesHome v-if="state.user &&state.user.accType === 'Module Coordinator'"/>
+<student v-if="state.user && state.user.accType == 'Student'" :user="state.user"/>
 </div>
 </template>
 
@@ -38,7 +38,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import student from '../components/student.vue';
-import moduleCoordinator from '../components/moduleCoordinator.vue';
+import coursesHome from '../components/coursesHome.vue';
 
 const user = computed(() => useStore().state.User.user);
 const listOfReports = computed(() => useStore().state.Report.listOfReports);
@@ -46,7 +46,7 @@ const listOfAssignments = computed(() => useStore().state.Assignment.listOfAssig
 export default {
   name: 'Home',
   components: {
-    moduleCoordinator,
+    coursesHome,
     student,
   },
   mounted() {
@@ -78,13 +78,14 @@ export default {
     }
   },
   setup() {
+    const store = useStore();
     const router = useRouter();
     function getReports(reportID) {
       router.push({ name: 'Report', params: { repid: reportID } });
     }
     const state = ref({
       error: '',
-      user,
+      user: computed(() => store.state.User.user),
       listOfReports,
       listOfAssignments,
     });
