@@ -87,12 +87,11 @@ export default {
         return store.state.Course.course._id;
       }),
     });
-    console.log(state.value.courseID);
     function allocate() {
       const assigmentDate = new URLSearchParams();
       assigmentDate.append('name', state.value.name);
       assigmentDate.append('dueDate', state.value.date);
-      assigmentDate.append('code', state.value.customID);
+      if (state.value.customID) assigmentDate.append('code', state.value.customID);
       assigmentDate.append('description', state.value.content);
       // eslint-disable-next-line no-underscore-dangle
       assigmentDate.append('authorID', state.value.User._id);
