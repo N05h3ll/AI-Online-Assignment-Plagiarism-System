@@ -92,8 +92,12 @@ router.post('/search', utils.isLoggedIn, (req, res) => {
 			$or: [{ name: { $regex: '.*' + req.body.query + '.*' } }, { code: { $regex: '.*' + req.body.query + '.*' } }]
 		}, {
 			authorInstitution: req.body.institution
-		}]
-	})
+			}, {
+				courseID: {$in: req.user.enrolledCourses}
+			}, {
+				_id: {$nin: req.user.submittedAssignments.map(x => x.assignmentID)}
+			}]
+	}).populate('courseID')
 		.exec(function (err, assignments) {
 			if (err) {
 				res.status(500).send("Internal Server Error!");
