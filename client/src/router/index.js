@@ -28,7 +28,7 @@ const routes = [
     component: Login,
   },
   {
-    path: "/upload/:assid",
+    path: "/upload/:cID/:assid",
     name: "Upload",
     component: Upload,
   },
@@ -44,9 +44,10 @@ const routes = [
     props: true,
   },
   {
-    path: "/Assignment/:assid",
+    path: "/course/:cID/Assignment/:assid",
     name: 'Assignment',
     component: Assignment,
+    props: true,
   },
   {
     path: "/addCourse",
