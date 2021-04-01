@@ -111,7 +111,7 @@ export default {
   mounted() {
     if (User.value) {
       const router = useRouter();
-      router.push('upload');
+      router.push({ name: 'Home' });
     }
   },
   setup() {
