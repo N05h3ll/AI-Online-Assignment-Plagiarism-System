@@ -114,6 +114,7 @@ export default {
       form.append('user', state.value.user.email);
       form.append('name', state.value.user.name);
       form.append('assignmentID', route.params.assid);
+      form.append('courseID', route.params.cID);
       form.append('assignmentName', state.value.Assignment.data.name);
       form.append('assignmentCode', state.value.Assignment.data.code);
       axios.post('http://127.0.0.1:5000', form, {
@@ -133,13 +134,3 @@ export default {
   },
 };
 </script>
-<style>
-
-.spinner {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.9)  center center no-repeat;
-}
-
-</style>
