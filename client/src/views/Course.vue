@@ -66,7 +66,7 @@ v-if="state.user.accType == 'Module Coordinator'
       </table>
 
       <div class="float-end"><button class="btn m-3 btn-primary"
-      v-if="state.user.accType == 'Module Coordinator'"
+      v-if="state.user.accType === 'Module Coordinator' | state.user.accType === 'Student'"
       @click="getAssignments">View Assignments</button>
 <button class="btn m-3 btn-primary"
       v-if="state.user.accType == 'Module Coordinator'"
@@ -94,7 +94,6 @@ export default {
       enrolledError: null,
     });
     axios.get(`http://127.0.0.1:3000/api/course/getcourse/${route.params.cID}`).then((response) => {
-      console.log(response);
       state.value.course = response.data;
       store.dispatch('Course/setCourse', response.data);
       state.value.loading = false;
