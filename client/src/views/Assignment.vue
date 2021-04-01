@@ -1,8 +1,13 @@
 <template>
+<div class="d-flex justify-content-center spinner"
+v-if="state.loading">
+<div class="align-self-center h1">
+    Loading ...</div>
+</div>
 <div
 class="d-flex justify-content-center spinner"
 v-if="state.user.accType == 'Module Coordinator'
-&& (state.submittedStudents || state.submissionError)">
+&& (state.submittedStudents || state.submissionError) && !state.loading">
   <button type="button" class="btn-close" aria-label="Close" @click="close"></button>
   <div class="align-self-center h1" v-if="state.submissionError">{{ state.submissionError }}</div>
     <div class="table-responsive mt-lg-5 w-100 overflow-scroll" v-if="state.submittedStudents">
@@ -37,8 +42,10 @@ v-if="state.user.accType == 'Module Coordinator'
     </table>
   </div>
 </div>
-<div class="container rounded" id="registerationFormContanier">
+<div class="container rounded" id="registerationFormContanier"
+v-if="!state.loading">
       <table>
+        <h2 class="h2 m-3 text-dark">Course: {{state.course.courseName}}</h2>
         <tr>
           <th><h5 class="h5">Assignment Name:  </h5></th>
           <th> <h5 class="h5 fw-bolder">{{state.Assignment.data.name}}</h5>  </th>
@@ -81,24 +88,32 @@ import { ref, computed } from 'vue';
 
 const Assignment = computed(() => useStore().state.Assignment.singleAssignment);
 export default {
-  mounted() {
-    const store = useStore();
-    const route = useRoute();
-    console.log(route.params.assid);
-    axios.get(`http://127.0.0.1:3000/api/assignment/getassignment/${route.params.assid}`).then((assignment) => {
-      store.dispatch('Assignment/setAssignment', assignment);
-    });
+  inheritAttrs: false,
+  props: {
+    course: {
+      required: true,
+      type: String,
+    },
   },
-  setup() {
+  setup(props) {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
     const state = ref({
       Assignment,
+      course: computed(() => {
+        if (props.course) { return JSON.parse(props.course); }
+        return store.state.Course.course;
+      }),
       user: computed(() => store.state.User.user),
       submittedStudents: null,
       submissionError: null,
       submitted: null,
+      loading: true,
+    });
+    axios.get(`http://127.0.0.1:3000/api/assignment/getassignment/${route.params.assid}`).then((assignment) => {
+      store.dispatch('Assignment/setAssignment', assignment);
+      state.value.loading = false;
     });
     axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/issubmitted`).then(() => {
       state.value.submitted = true;
@@ -111,7 +126,7 @@ export default {
     }
     function submit() {
       // eslint-disable-next-line no-underscore-dangle
-      router.push({ name: 'Upload', params: { assid: state.value.Assignment.data._id } });
+      router.push({ name: 'Upload', params: { assid: state.value.Assignment.data._id, cID: state.value.course._id } });
     }
     function getSubmittedStudents() {
       // eslint-disable-next-line no-underscore-dangle
