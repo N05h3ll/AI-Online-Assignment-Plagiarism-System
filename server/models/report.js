@@ -11,7 +11,8 @@ const reportSchema = new schema({
   fileName: { type: String },
   assignmentName: { type: String },
   assignmentCode: { type: String },
-  assignmentID: { type: String },
+  assignmentID: { type: mongoose.Schema.Types.ObjectId, ref: 'assignment' },
+  courseID: { type: mongoose.Schema.Types.ObjectId, ref: 'course' },
   baseParagraph: 
     {
       type: [{
