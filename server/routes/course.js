@@ -78,4 +78,34 @@ router.get('/getcourse/:cID', utils.isLoggedIn, (req, res) => {
 	})
 })
 
+router.post('/search', utils.isLoggedIn, (req, res) => {
+	Course.find({
+		$and: [{
+			$or: [{ courseName: { $regex: '.*' + req.body.query + '.*' } }, { courseCode: { $regex: '.*' + req.body.query + '.*' } }]
+		}, {
+			courseInstitution: req.body.institution
+			}, {
+			_id: {$nin: req.user.enrolledCourses}
+		}]
+	}).populate('creator')
+		.exec(function (err, assignments) {
+			if (err) {
+				res.status(500).send("Internal Server Error!");
+			}else if (assignments.length == 0) {
+				res.status(404).send("No Results Found");
+			} else if (assignments.length !== 0) {
+				res.status(200).send(assignments);
+			}
+		});
+})
+
+router.post('/enroll/:courseID', utils.isLoggedIn, (req, res) => {
+	User.findByIdAndUpdate(req.user._id, { $push: { enrolledCourses: req.params.courseID } }, (error, user) => {
+		if (error) { return res.status(500).send('Internal Server Error') }
+		Course.findByIdAndUpdate(req.params.courseID, { $push: { enrolledStudents: req.user._id } }, (error, updatedCourse) => {
+			if (error) { return res.status(500).send('Internal Server Error') }
+			return res.status(201).send('Enrolled Successfully');
+		})
+	})
+})
 module.exports = router
