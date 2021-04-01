@@ -119,7 +119,6 @@ router.post("/login", function (req, res, next) {
 
 
 router.get('/user', utils.isLoggedIn, async (req,res)=>{
-  console.log(req.session.passport.user);
   await User.findOne({ email: req.session.passport.user }).
     populate('assignments').
     populate('reports').
