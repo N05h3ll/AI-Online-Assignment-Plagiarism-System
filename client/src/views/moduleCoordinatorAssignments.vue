@@ -47,7 +47,8 @@
           </div>
         </div>
         <div>
-    <router-link :to="{ name: 'AddAssignment', params: { courseID: state.course._id } }">
+    <router-link :to="{ name: 'AddAssignment', params: { courseID: state.course._id } }"
+    v-if="state.user.accType === 'Module Coordinator'">
     <button class="btn btn-success float-end m-lg-5">Allocate a new assignment</button>
     </router-link>
         </div>
@@ -71,6 +72,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const state = ref({
+      user: computed(() => store.state.User.user),
       course: computed(() => {
         if (props.course) { return JSON.parse(props.course); }
         return store.state.Course.course;
@@ -81,7 +83,8 @@ export default {
       router.push({ name: 'Home' });
     }
     function getAssignment(assignmentID) {
-      router.push({ name: 'Assignment', params: { assid: assignmentID } });
+      // eslint-disable-next-line no-underscore-dangle
+      router.push({ name: 'Assignment', params: { assid: assignmentID, cID: state.value.course._id, course: JSON.stringify(state.value.course) } });
     }
     return {
       state,
