@@ -6,9 +6,11 @@
             </button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-outline-light me-sm-5" type="submit">
+            <router-link :to="{name: 'Help'}">
+          <button class="btn btn-outline-light me-sm-5" type="submit">
               Help!
             </button>
+        </router-link>
           </li>
             <li class="nav-item">
               <router-link :to="{name:'Home'}">
@@ -46,7 +48,10 @@ export default {
         store.dispatch('User/setUser', res.data);
       }).catch(() => {
         store.dispatch('User/setUser', null);
-        router.push({ name: 'Home' });
+        // eslint-disable-next-line no-underscore-dangle
+        if (router.currentRoute._value.name !== 'Login' && router.currentRoute._value.name !== 'Register' && router.currentRoute._value.name !== 'Help') {
+          router.push({ name: 'Home' });
+        }
       });
       setTimeout(getUser, 30000);
     }());
