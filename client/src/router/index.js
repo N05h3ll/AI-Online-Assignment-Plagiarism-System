@@ -9,6 +9,7 @@ import Report from '../views/Report.vue';
 import Assignment from '../views/Assignment.vue';
 import addCourse from '../views/addCourse.vue';
 import Course from '../views/Course.vue';
+import Help from '../views/Help.vue';
 import moduleCoordinatorAssignments from '../views/moduleCoordinatorAssignments.vue';
 
 const routes = [
@@ -64,6 +65,11 @@ const routes = [
     name: 'courseAssignments',
     component: moduleCoordinatorAssignments,
     props: true,
+  },
+  {
+    path: "/help",
+    name: 'Help',
+    component: Help,
   },
 ];
 
