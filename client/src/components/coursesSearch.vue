@@ -105,10 +105,30 @@ export default {
         });
       }
     }
+    function enrollCourse(courseID) {
+      axios.post(`http://127.0.0.1:3000/api/course/enroll/${courseID}`).then(async () => {
+        state.value.enrolledSuccess = true;
+        state.value.enrolledFail = false;
+        await setTimeout(() => {
+          close();
+          state.value.enrolledSuccess = false;
+          state.value.enrolledFail = false;
+        }, 3000);
+      }).catch(async () => {
+        state.value.enrolledSuccess = false;
+        state.value.enrolledFail = true;
+        await setTimeout(() => {
+          close();
+          state.value.enrolledSuccess = false;
+          state.value.enrolledFail = false;
+        }, 3000);
+      });
+    }
     return {
       state,
       close,
       search,
+      enrollCourse,
     };
   },
 };
