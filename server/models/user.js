@@ -20,6 +20,7 @@ const user = new schema({
       status: { type: String },
       assignmentName: { type: String },
       assignmentCode: { type: String },
+      courseID: [{ type: mongoose.Schema.Types.ObjectId, ref: 'course' }],
     }
   ]
 });

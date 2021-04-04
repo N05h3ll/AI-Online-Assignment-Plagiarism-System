@@ -132,27 +132,46 @@ router.get('/:assid/getsubmittedstudents', utils.isLoggedIn, (req, res) => {
 })
 router.get('/:assid/issubmitted', utils.isLoggedIn, (req, res) => {
 	// console.log(req.params.assid)
-	Assignment.findById(req.params.assid, (error, assignment) => {
+	Assignment.findOne({
+		$and: [
+			{ _id: req.params.assid },
+			{ 'submittedStudents.studentdID': req.user._id },
+			{ 'submittedStudents.status': { $ne: 'Second Trial' } }
+		]
+	}, (error, assignment) => {
 		if (error) {
-			res.status(500).send("Internal Server Error")
-		} else if (assignment) {
-			
-			Assignment.findOne({
-				$and: [
-					{ 'submittedStudents.studentdID': { $in: assignment.submittedStudents.map(x => x.studentdID) } },
-					{'submittedStudents.studentdID': {$ne: 'Second Trial'}}
-				]
-			}, (error, result) => {
-					if (error) {
-						res.status(500).send("Internal Server Error!")
-					} else if (!result) {
-						res.status(200).send();
-					} else if (result) {
-						res.status(403).send()
-					}
-					
-			})
+			return res.status(500).send("Internal Server Error")
+		} else if (!assignment) {return  res.status(403).send() }
+			return res.status(200).send();
 		}
+	)
+})
+router.get('/:assID/allow/:stuID/rep/:repID', utils.isLoggedIn, (req, res) => {
+	console.log(req.params.assID)
+	console.log(req.params.stuID)
+	console.log(req.params.repID)
+	Assignment.findOneAndUpdate({ _id: req.params.assID, 'submittedStudents.studentdID': req.params.stuID }
+		, {
+			$set: {
+			"submittedStudents.$.status": 'Second Trial'
+		}}, (error, ass) => {
+		if (error) { return res.status(500).send('Internal Server Error') }
+		
+			Report.findByIdAndUpdate(req.params.repID, { status: 'Second Trial', isSecondTrial: true }, (error) => {
+				if (error) { return res.status(500).send('Internal Server Error!') }
+				User.findOneAndUpdate({ _id: req.params.stuID, 'submittedAssignments.assignmentID': req.params.assID },
+					{
+						$set: {
+						'submittedAssignments.$.status': 'Second Trial'
+					}
+					},
+					(error, usr) => {
+						console.log(usr)
+						if (error) { return res.send(500).send('Internal Server Error') }
+						return res.status(200).send('allowed');
+					}
+				)
+		})
 	})
 })
 module.exports = router

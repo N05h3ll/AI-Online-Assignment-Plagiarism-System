@@ -6,7 +6,8 @@ v-if="state.loading">
 </div>
 <div
 class="d-flex justify-content-center spinner"
-v-if="state.user.accType == 'Module Coordinator'
+v-if="(state.user.accType == 'Module Coordinator'
+|| state.user.accType == 'Teacher Assistant')
 && (state.submittedStudents || state.submissionError) && !state.loading">
   <button type="button" class="btn-close" aria-label="Close" @click="close"></button>
   <div class="align-self-center h1" v-if="state.submissionError">{{ state.submissionError }}</div>
@@ -18,6 +19,7 @@ v-if="state.user.accType == 'Module Coordinator'
           <th scope="col">Submission Date</th>
           <th scope="col">Status</th>
           <th scope="col"></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
@@ -28,6 +30,8 @@ v-if="state.user.accType == 'Module Coordinator'
           v-if="student.status == 'Passed'">{{ student.status }}</td>
           <td class="badge bg-danger mt-sm-2"
           v-if="student.status == 'Failed'">{{ student.status }}</td>
+          <td class="badge bg-warning mt-sm-2"
+          v-if="student.status == 'Second Trial'">{{ student.status }}</td>
           <td>
             <button
               type="button"
@@ -35,6 +39,24 @@ v-if="state.user.accType == 'Module Coordinator'
               @click="getReport(student.reportID)"
             >
               View Report
+            </button>
+          </td>
+          <td>
+            <button
+              v-if="student.status === 'Failed' && state.user.accType === 'Teacher Assistant'"
+              type="button"
+              class="btn btn-success btn-sm"
+              @click="allowSecondTrial(student.studentdID, student.reportID)"
+            >
+              Allow Second Trial
+            </button>
+            <button
+            v-if="student.status === 'Second Trial' && state.user.accType === 'Teacher Assistant'"
+              type="button"
+              class="btn btn-secondary btn-sm disabled"
+              @click="allowSecondTrial(student.studentdID, student.reportID)"
+            >
+              Allow Second Trial
             </button>
           </td>
         </tr>
@@ -69,13 +91,13 @@ v-if="!state.loading">
     <div v-html="state.Assignment.data.description" class="row fs-5"></div>
       <div class="row"><button class="btn btn-success"
       v-if="state.user.accType == 'Student'
-      && state.submitted" @click="submit">Submit</button>
+      && !state.submitted" @click="submit">Submit</button>
       <h3 class="alert alert-warning"
-      v-if="!state.submitted &&
+      v-if="state.submitted &&
       state.user.accType == 'Student'">You have already submitted this assignemnt.</h3>
       </div>
       <div class="row"><button class="btn btn-primary"
-      v-if="state.user.accType == 'Module Coordinator'"
+      v-if="state.user.accType == 'Module Coordinator' || state.user.accType == 'Teacher Assistant'"
       @click="getSubmittedStudents">View Submitted Students</button></div>
     </div>
 </template>
@@ -133,7 +155,7 @@ export default {
       axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/getsubmittedstudents`).then((subStudents) => {
         state.value.submittedStudents = subStudents.data;
         state.value.submissionError = null;
-        console.log(state.value.submittedStudents);
+        console.log(subStudents.data);
       }).catch((error) => {
         state.value.submittedStudents = null;
         state.value.submissionError = error.response.data;
@@ -143,12 +165,26 @@ export default {
       // console.log(assignmentID);
       router.push({ name: 'Report', params: { repid: repID } });
     }
+    function allowSecondTrial(stuID, repID) {
+      axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/allow/${stuID}/rep/${repID}`).then(
+        axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/getsubmittedstudents`).then((subStudents) => {
+          state.value.submittedStudents = null;
+          state.value.submittedStudents = subStudents.data;
+          state.value.submissionError = null;
+          console.log('allowed');
+        }).catch((error) => {
+          state.value.submittedStudents = null;
+          state.value.submissionError = error.response.data;
+        }),
+      );
+    }
     return {
       state,
       submit,
       close,
       getSubmittedStudents,
       getReport,
+      allowSecondTrial,
     };
   },
 };

@@ -94,6 +94,7 @@ router.post('/addreport', (req,res)=>{
             assignmentID: req.body.assignmentID,
             assignmentName: req.body.assignmentName,
             assignmentCode: req.body.assignmentCode,
+            courseID: report.courseID,
             submissionDate: report.uploadDate,
             status: report.status
           }

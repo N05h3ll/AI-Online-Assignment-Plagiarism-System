@@ -3,6 +3,7 @@ const router = express.Router()
 const utils = require('../utils')
 const passport = require('passport')
 const User = require('../models/user')
+require('dotenv').config()
 let nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
   service: 'gmail',
