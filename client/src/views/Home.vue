@@ -35,16 +35,12 @@
 
 <script>
 import { ref, computed } from 'vue';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import student from '../components/student.vue';
 import TA from '../components/TA.vue';
 import coursesHome from '../components/coursesHome.vue';
 
-const user = computed(() => useStore().state.User.user);
-const listOfReports = computed(() => useStore().state.Report.listOfReports);
-const listOfAssignments = computed(() => useStore().state.Assignment.listOfAssignments);
 export default {
   name: 'Home',
   components: {
@@ -61,8 +57,6 @@ export default {
     const state = ref({
       error: '',
       user: computed(() => store.state.User.user),
-      listOfReports,
-      listOfAssignments,
     });
     return {
       state,
