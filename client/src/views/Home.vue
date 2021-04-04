@@ -3,9 +3,9 @@
 <div class="container-fluid ">
   <div v-if="!state.user">
     <!--welcome-->
-    <div class="container">
-      <h1>Welcome To Online Assigment,Plagiarsim System</h1>
-      <p>
+    <div class="container mt-5">
+      <h1 class="text-white">Welcome To,  Online Assigment Plagiarsim System</h1>
+      <p class="text-white">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget eros sapien.
         Pellentesque vulputate sed ligula quis dapibus. Proin varius metus ac lorem egestas, id
         aliquam eros dapibus.
@@ -29,6 +29,7 @@
 <!-- MODULE COORDINATOR -->
 <coursesHome v-if="state.user &&state.user.accType === 'Module Coordinator'"/>
 <student v-if="state.user && state.user.accType == 'Student'" :user="state.user"/>
+<TA v-if="state.user && state.user.accType === 'Teacher Assistant'"/>
 </div>
 </template>
 
@@ -38,6 +39,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import student from '../components/student.vue';
+import TA from '../components/TA.vue';
 import coursesHome from '../components/coursesHome.vue';
 
 const user = computed(() => useStore().state.User.user);
@@ -48,34 +50,7 @@ export default {
   components: {
     coursesHome,
     student,
-  },
-  mounted() {
-    if (user.value) {
-      const store = useStore();
-
-      // eslint-disable-next-line no-inner-declarations
-      (function getAllReports() {
-        axios.get('http://127.0.0.1:3000/api/report/getallreports').then((res) => {
-          store.dispatch('Report/setListOfReports', res.data);
-        }).catch((error) => {
-          console.log(error.response.data);
-          store.dispatch('Report/setListOfReports', null);
-        });
-        setTimeout(getAllReports, 30000);
-      }());
-
-      // eslint-disable-next-line no-inner-declarations
-      (function getAllAssignments() {
-        axios.get('http://127.0.0.1:3000/api/assignment/getallassignments').then((res) => {
-          store.dispatch('Assignment/setListOfAssignments', res.data);
-          // console.log(res.data);
-        }).catch((error) => {
-          console.log(error.response.data);
-          store.dispatch('Assignment/setListOfAssignments', null);
-        });
-        setTimeout(getAllAssignments, 30000);
-      }());
-    }
+    TA,
   },
   setup() {
     const store = useStore();
