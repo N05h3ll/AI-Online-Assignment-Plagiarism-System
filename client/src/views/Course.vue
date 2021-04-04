@@ -1,7 +1,8 @@
 <template>
 <div
 class="d-flex justify-content-center spinner"
-v-if="state.user.accType == 'Module Coordinator'
+v-if="(state.user.accType == 'Module Coordinator'
+|| state.user.accType == 'Teacher Assistant')
 && (state.enrolledStudents || state.enrolledError)">
   <button type="button" class="btn-close" aria-label="Close" @click="close"></button>
   <div class="align-self-center h1" v-if="state.enrolledError">
@@ -66,10 +67,12 @@ v-if="state.user.accType == 'Module Coordinator'
       </table>
 
       <div class="float-end"><button class="btn m-3 btn-primary"
-      v-if="state.user.accType === 'Module Coordinator' | state.user.accType === 'Student'"
+      v-if="state.user.accType === 'Module Coordinator' || state.user.accType === 'Student'
+      || state.user.accType === 'Teacher Assistant'"
       @click="getAssignments">View Assignments</button>
 <button class="btn m-3 btn-primary"
-      v-if="state.user.accType == 'Module Coordinator'"
+      v-if="state.user.accType === 'Module Coordinator'
+      || state.user.accType === 'Teacher Assistant'"
       @click="getEnrolledStudents">View Enrolled Students</button>
     </div>
 </div>
