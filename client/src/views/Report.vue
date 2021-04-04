@@ -1,5 +1,10 @@
 <template>
-  <div class="float-end me-sm-3">
+<div class="d-flex justify-content-center spinner"
+v-if="state.loading">
+<div class="align-self-center h1">
+    Loading ...</div>
+</div>
+  <div class="float-end me-sm-3" v-if="!state.loading">
     <div class="input-group mb-3">
       <input
         type="text"
@@ -11,7 +16,7 @@
       />
     </div>
   </div>
-  <div class="container" id="middleContainer" v-if="state.Report.data">
+  <div class="container" id="middleContainer" v-if="state.Report.data && !state.loading">
     <div class="row" id="registerationFormContanier">
       <div class="col-lg-8 me-sm-3 align-self-center">
         <h2 style="color: rgb(0, 0, 0);">OAPS REPORT</h2>
@@ -55,12 +60,19 @@
       </div>
       <div class="col rounded me-sm-3">
           <button class="btn btn-primary mt-sm-1" @click="sendReport">Send report via email</button>
-          <div class="label mt-5"> <h3> filter results </h3> </div>
+          <div class="label mt-5"> <h3> Filter Results </h3> </div>
          <div class="filterContainer mt-1">
           <div id="container" class="m-2">
             <div id="results ">
               <ul>
-                <li v-for="sent in filterList" :key="sent"> {{sent.baseSentence}}
+                <li v-for="sent in filterList" :key="sent">
+                  <span v-if="state.readmore">{{sent.baseSentence}}
+                    <a class="text-primary"
+                    v-if="state.readmore" @click="toggleReadMore">Read less...</a>
+                  </span>
+                <span v-if="!state.readmore">{{sent.baseSentence.slice(0,50)}}
+                  <a class="text-primary"
+                  v-if="!state.readmore" @click="toggleReadMore">Read More...</a></span>
                   {{ ((sent.percentage.$numberDecimal - 0.5) / 0.5) * 100 }} %</li>
               </ul>
             </div>
@@ -83,12 +95,15 @@ export default {
     // const store = useStore();
     const store = useStore();
     const route = useRoute();
-    axios.get(`http://127.0.0.1:3000/api/report/getreport/${route.params.repid}`).then((report) => {
-      store.dispatch('Report/setReport', report);
-    });
     const state = ref({
       Report,
       filterCounter: null,
+      loading: true,
+      readmore: false,
+    });
+    axios.get(`http://127.0.0.1:3000/api/report/getreport/${route.params.repid}`).then((report) => {
+      store.dispatch('Report/setReport', report);
+      state.value.loading = false;
     });
     console.log(state.value.Report);
     // eslint-disable-next-line max-len
@@ -108,6 +123,9 @@ export default {
     watch(state.value.filterCounter, (newValue) => {
       state.value.filterCounter = newValue;
     });
+    function toggleReadMore() {
+      state.value.readmore = !state.value.readmore;
+    }
     function sendReport() {
       // eslint-disable-next-line no-underscore-dangle
       axios.get(`http://127.0.0.1:3000/api/report/emailreport/${state.value.Report.data._id}`);
@@ -116,6 +134,7 @@ export default {
       state,
       filterList,
       sendReport,
+      toggleReadMore,
     };
   },
 };
