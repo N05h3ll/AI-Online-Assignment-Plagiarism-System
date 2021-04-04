@@ -76,6 +76,8 @@
                       v-if="assignment.status == 'Passed'">{{assignment.status}}</td>
                       <td class="badge bg-danger mt-sm-2"
                       v-if="assignment.status == 'Failed'">{{assignment.status}}</td>
+                      <td class="badge bg-warning mt-sm-2"
+                      v-if="assignment.status == 'Second Trial'">{{assignment.status}}</td>
                       <td>{{assignment.assignmentName}}</td>
                       <td>{{assignment.assignmentCode}}</td>
                       <td>{{assignment.submissionDate}}</td>
@@ -83,7 +85,7 @@
                         <button
                           type="button"
                           class="btn btn-primary btn-sm"
-                          @click="getAssignment(assignment.assignmentID)"
+                          @click="getAssignment(assignment.assignmentID, assignment.courseID[0])"
                         >
                           View
                         </button>
@@ -133,7 +135,6 @@ export default {
       reportButtonClass: 'btn-primary',
       titleState: 'Courses',
     });
-
     function toggleAssignments() {
       state.value.assignmentButtonClass = 'btn-warning';
       state.value.reportButtonClass = 'btn-primary';
@@ -152,9 +153,8 @@ export default {
       state.value.reportButtonClass = 'btn-primary';
       state.value.titleState = 'Courses';
     }
-    function getAssignment(assignmentID) {
-      // console.log(assignmentID);
-      router.push({ name: 'Assignment', params: { assid: assignmentID } });
+    function getAssignment(assignmentID, courseID) {
+      router.push({ name: 'Assignment', params: { assid: assignmentID, cID: courseID } });
     }
     function getReport(repID) {
       // console.log(assignmentID);
