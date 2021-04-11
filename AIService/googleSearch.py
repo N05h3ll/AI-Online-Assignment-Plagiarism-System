@@ -101,20 +101,12 @@ def filterContent(text, query):
 
     cleanText = clean(text)
     cleanSent = sentences(cleanText)
-    # sentDf = pd.DataFrame(cleanSent, columns=['sent']) 
     
     pattern = [[{"LOWER": word}] for word in cleanQueryList]
     pattern.append([{"LOWER": {"REGEX":f".*{query}.*"}}])
 
     matcher.add('names', None, *pattern)
     sentList = filter(lambda x: matcher(nlp(x)), cleanSent)
-    # for bodySent in sentDf['sent']:
-    #     doc = nlp(bodySent)
-    #     matches = matcher(doc)
-    #     if not matches:
-    #         sentDf = sentDf[sentDf['sent'] != bodySent]
-
-    # return sentDf['sent']
     return sentList
 
 # ADD your query sentence to get search results
@@ -149,7 +141,3 @@ class MessageAnnouncer:
                 self.listeners[i].put_nowait(msg)
             except queue.Full:
                 del self.listeners[i]
-
-# for site in sites:
-#     # get the content DataFrame from results list
-#     print(filterContent(getContent(site), query))
