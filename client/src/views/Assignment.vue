@@ -91,9 +91,9 @@ v-if="!state.loading">
     <div v-html="state.Assignment.data.description" class="row fs-5"></div>
       <div class="row"><button class="btn btn-success"
       v-if="state.user.accType == 'Student'
-      && !state.submitted" @click="submit">Submit</button>
+      && state.submitted" @click="submit">Submit</button>
       <h3 class="alert alert-warning"
-      v-if="state.submitted &&
+      v-if="!state.submitted &&
       state.user.accType == 'Student'">You have already submitted this assignemnt.</h3>
       </div>
       <div class="row"><button class="btn btn-primary"

@@ -131,18 +131,20 @@ router.get('/:assid/getsubmittedstudents', utils.isLoggedIn, (req, res) => {
 	})
 })
 router.get('/:assid/issubmitted', utils.isLoggedIn, (req, res) => {
-	// console.log(req.params.assid)
+	console.log(req.user._id)
 	Assignment.findOne({
 		$and: [
 			{ _id: req.params.assid },
-			{ 'submittedStudents.studentdID': req.user._id },
-			{ 'submittedStudents.status': { $ne: 'Second Trial' } }
+			{ 'submittedStudents.studentdID': req.user._id }
 		]
 	}, (error, assignment) => {
 		if (error) {
 			return res.status(500).send("Internal Server Error")
 		} else if (!assignment) {return  res.status(403).send() }
+		if (assignment.submittedStudents.find(x => x.studentdID == String(req.user._id) && x.status != 'Second Trial')) {
 			return res.status(200).send();
+		}
+		return  res.status(403).send()
 		}
 	)
 })
