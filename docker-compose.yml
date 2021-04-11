@@ -18,6 +18,25 @@ services:
       - mongo
     depends_on: 
       - mongo
+
+  frontend:
+    build:
+      context: ./client
+      network: host
+    ports: 
+      - "8080:8080"
+    depends_on: 
+      - backend
+      - mongo
+
+  selenium:
+    container_name: selenium
+    image: selenium/standalone-chrome:89.0
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+    volumes:
+      - /dev/shm:/dev/shm
   ai:
     build:
       context: ./AIService
@@ -26,13 +45,6 @@ services:
       - "5000:5000"
     depends_on: 
       - backend
-  frontend:
-    build:
-      context: ./client
-      network: host
-    ports: 
-      - "8080:8080"
-    depends_on: 
-      - ai
+    links:
+      - frontend
       - backend
-      - mongo
