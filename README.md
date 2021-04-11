@@ -10,7 +10,7 @@ MTI 2021 Graduation Project.
 	OAPSEMAIL=<YOUR EMAIL GOES HERE>
 	OAPSPASSWORD=<YOUR PASSWORD GOES HERE>
 	```
-	Those credentials are for any google mail ( [gmail](https://mail.google.com) ) account used for sending email confirmations and reports.
+	Those credentials are for any google mail ( [Gmail](https://mail.google.com) ) account used for sending email confirmations and reports.
 	
 	For the official credentials for the OAPS email please contact the [project maintainer](https://github.com/N05h3ll).
 * Navigate to the project home through your `(Terminal for mac, linux users)` or `(Powershell for windows users)`
@@ -20,9 +20,9 @@ MTI 2021 Graduation Project.
 	```
 	You can read more about [Docker Compose](https://docs.docker.com/compose/reference/up/) for various installation and running options.
 
- *`Project installation and running may take up to 20 minutes according to your network speed`*
+ > *Project installation and running may take up to 20 minutes according to your network speed*
 
- *`Please Note that the project is memory  'RAM' intensive it may use up to 16gb of memory to load the models. This is only a temporarly issue and will be optimized in future updates.`* 
+ > *Please Note that the project is memory  'RAM' intensive it may use up to 16gb of memory to load the models. This is only a temporarly issue and will be optimized in future updates.* 
 
 The project now is running in your device navigate to ``` http://127.0.0.1:8080 ``` or ``` http://localhost:8080 ``` .
 
