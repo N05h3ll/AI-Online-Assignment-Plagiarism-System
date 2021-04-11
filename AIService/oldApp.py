@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response
 from werkzeug.utils import secure_filename
 import os
 from flask_cors import CORS, cross_origin
@@ -16,7 +16,7 @@ from gensim.models import KeyedVectors
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 app= Flask(__name__)
-CORS(app, origins=['http://frontend:8080'], supports_credentials=True)
+CORS(app, origins=['http://frontend:8080'], supports_credentials=True, headers=['Access-Control-Allow-Origin', 'http://127.0.0.1'])
 
 
 uploadFolder = './public'
@@ -30,10 +30,15 @@ def allowed_file(filename):
 
 
 
+
+
 @app.route('/', methods=['POST', 'GET'])
+@cross_origin(supports_credentials=True)
 def index():
     if request.method == 'POST':
+        print('POST')
         # check if the post request has the file part
+        print(request.files)
         if 'file' not in request.files:
             res = make_response('No files were uploaded!, Please try again.', 422)
             return res
@@ -48,6 +53,7 @@ def index():
             return res
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename.rsplit('.')[0]+'-'+datetime.now().strftime("%Y-%m-%d-%H-%M-%S")+'.'+file.filename.rsplit('.')[1])
+            print(filename)
             file.save(os.path.join(app.config['uploadFolder'], filename))
             text = textExtractor(os.path.join(app.config['uploadFolder'], filename))
             text = clean(text)
@@ -55,7 +61,7 @@ def index():
             reportList = []
             options = Options()
             options.add_argument("--headless")
-            driver = webdriver.Remote(command_executor='http://selenium:4444/wd/hub', options=options)
+            driver = webdriver.Chrome(options=options)
             for i in text:
                 reportList.append([i, False, 0, 'URL'])
             reportArray = np.array(reportList)
@@ -71,6 +77,7 @@ def index():
             driver.close()
             driver.quit()
             npArray = np.array(fullList)
+            print ("Full Array Length "+str(len(npArray)))
             compareDF = pd.DataFrame(npArray, columns=['baseSent', 'suspectSent', ''])
             for q in ['baseSent', 'suspectSent']:
                 compareDF[q + '_n'] = compareDF[q]
@@ -115,11 +122,10 @@ def index():
             responseObject['assignmentCode'] = request.values['assignmentCode']
             responseObject['courseID'] = request.values['courseID']
             reportJson = json.loads(json.dumps(responseObject, indent=2))
-            res = requests.post('http://backend:3000/api/report/addreport', json=reportJson)
-            response = make_response(jsonify(message = 'Done'), 200)
-            response.headers['Access-Control-Allow-Origin'] = request.environ['HTTP_ORIGIN']
-            response.headers['Access-Control-Allow-Credentials'] = 'true'
-            return response
+            print(reportJson)
+            res = requests.post('http://127.0.0.1:3000/api/report/addreport', json=reportJson)
+            return 'DONE'
+            
     return "GET Response"
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

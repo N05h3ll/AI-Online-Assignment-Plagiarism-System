@@ -81,11 +81,8 @@ router.get('/emailreport/:repid', utils.isLoggedIn, async (req, res) => {
 router.post('/addreport', (req,res)=>{
   console.log(req.body)
   rep = new Report(req.body);
-
   rep.save((err, report) => {
     if (err) {console.log(err)}
-    // console.log(report)
-    // console.log(report)
     User.findOneAndUpdate({email: req.body.email},
       {
         $push: {
@@ -117,7 +114,6 @@ router.post('/addreport', (req,res)=>{
         })
     })
   });
-
 })
 
 module.exports = router
