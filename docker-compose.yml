@@ -10,6 +10,8 @@ services:
     build:
       context: ./server
       network: host
+    volumes:
+      - ./server:/app
     ports:
       - "3000:3000"
     env_file: 
@@ -23,6 +25,8 @@ services:
     build:
       context: ./client
       network: host
+    volumes:
+      - ./client:/app
     ports: 
       - "8080:8080"
     depends_on: 
@@ -43,6 +47,8 @@ services:
       network: host
     ports: 
       - "5000:5000"
+    volumes:
+      - ./AIService:/usr/src/app
     depends_on: 
       - backend
     links:
