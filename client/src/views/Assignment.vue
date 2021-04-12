@@ -91,9 +91,9 @@ v-if="!state.loading">
     <div v-html="state.Assignment.data.description" class="row fs-5"></div>
       <div class="row"><button class="btn btn-success"
       v-if="state.user.accType == 'Student'
-      && state.submitted" @click="submit">Submit</button>
+      && !state.submitted" @click="submit">Submit</button>
       <h3 class="alert alert-warning"
-      v-if="!state.submitted &&
+      v-if="state.submitted &&
       state.user.accType == 'Student'">You have already submitted this assignemnt.</h3>
       </div>
       <div class="row"><button class="btn btn-primary"
@@ -167,9 +167,9 @@ export default {
     }
     function allowSecondTrial(stuID, repID) {
       axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/allow/${stuID}/rep/${repID}`).then(
-        axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/getsubmittedstudents`).then((subStudents) => {
+        axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/getsubmittedstudents`).then(async (subStudents) => {
           state.value.submittedStudents = null;
-          state.value.submittedStudents = subStudents.data;
+          await setTimeout(() => { state.value.submittedStudents = subStudents.data; }, 500);
           state.value.submissionError = null;
           console.log('allowed');
         }).catch((error) => {

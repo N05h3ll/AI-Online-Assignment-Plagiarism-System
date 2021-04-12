@@ -15,6 +15,7 @@ import numpy as np
 from gensim.models import KeyedVectors
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 app= Flask(__name__)
 CORS(app, origins=['http://frontend:8080'], supports_credentials=True)
 
@@ -55,7 +56,7 @@ def index():
             reportList = []
             options = Options()
             options.add_argument("--headless")
-            driver = webdriver.Remote(command_executor='http://selenium:4444/wd/hub', options=options)
+            driver = webdriver.Remote(command_executor='http://127.0.0.1:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME, options=options)
             for i in text:
                 reportList.append([i, False, 0, 'URL'])
             reportArray = np.array(reportList)
@@ -69,7 +70,6 @@ def index():
                     cleanContent = list(filterContent(content, sent))
                     fullList.extend(list(map(lambda x: [sent, x, site], cleanContent)))
             driver.close()
-            driver.quit()
             npArray = np.array(fullList)
             compareDF = pd.DataFrame(npArray, columns=['baseSent', 'suspectSent', ''])
             for q in ['baseSent', 'suspectSent']:
