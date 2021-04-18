@@ -36,23 +36,17 @@ top_websites = ['wikipedia', 'springer', 'researchgate']
 
 def textExtractor(filePath):
     return docx2txt.process(filePath)
-def text_sentence_tokenizer(text): 
-    text = ' '.join(re.split(r'\s\s+', ' '.join(text.split('\n'))))
-    # nltk sentence tokenizer
-    sentences = nltk.sent_tokenize(text)
-    sentences_no_punc = []
-    #extract sentences with "." delimeter. ignoring nulls and "\n" and other simbols
-    for s in sentences:
-        sentences_no_punc.append(' '.join(s.split()).lower())
-    return sentences_no_punc
 
 def sentences(text):
     # split sentences and questions
-    text = re.split('[.?]', text)
+    text = ' '.join(re.split(r'\s\s+', ' '.join(text.split('\n'))))
+    text = re.findall('.*?[.!?]', text)
     clean_sent = []
     for sent in text:
+        sent = ' '.join(sent.split()).lower()
         sent = re.sub("^ {1,}", "", str(sent))
-        clean_sent.append(sent)
+        if sent and not sent.isspace():
+            clean_sent.append(sent)
     return clean_sent
 
 
@@ -113,7 +107,7 @@ def filterContent(text, query):
 # query = "big data storage"
 def querySearch(query):
 # # Google search the query
-    sites = search(query, start=0, num=10, stop=10, pause=2)
+    sites = search(query, start=0, num=10, stop=10, pause=2, lang='en')
 # # list of sites will be appended according to the top sites list
     results =[]
     for result in sites:

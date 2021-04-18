@@ -6,7 +6,7 @@ from datetime import datetime
 import spacy
 import en_core_web_sm
 import requests
-from googleSearch import textExtractor, text_sentence_tokenizer, clean, querySearch, getContent, filterContent
+from googleSearch import textExtractor, clean, querySearch, getContent, filterContent, sentences
 from util import split_and_zero_padding, make_w2v_embeddings, ManDist
 import json
 import tensorflow as tf
@@ -52,11 +52,13 @@ def index():
             file.save(os.path.join(app.config['uploadFolder'], filename))
             text = textExtractor(os.path.join(app.config['uploadFolder'], filename))
             text = clean(text)
-            text = text_sentence_tokenizer(text)
+            text = sentences(text)
             reportList = []
-            options = Options()
-            options.add_argument("--headless")
-            driver = webdriver.Remote(command_executor='http://127.0.0.1:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME, options=options)
+            opts = Options()
+            opts.add_argument("--headless")
+            opts.add_argument('--no-sandbox')
+            opts.add_argument('--disable-dev-shm-usage')
+            driver = webdriver.Remote(command_executor='http://selenium:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME, options=opts)
             for i in text:
                 reportList.append([i, False, 0, 'URL'])
             reportArray = np.array(reportList)
@@ -69,7 +71,7 @@ def index():
                     content = getContent(site, driver)
                     cleanContent = list(filterContent(content, sent))
                     fullList.extend(list(map(lambda x: [sent, x, site], cleanContent)))
-            driver.close()
+            driver.quit()
             npArray = np.array(fullList)
             compareDF = pd.DataFrame(npArray, columns=['baseSent', 'suspectSent', ''])
             for q in ['baseSent', 'suspectSent']:
@@ -97,14 +99,14 @@ def index():
                 return value == "True"
             for i in reportArray:
 
-                baseParagraphList.append({"baseSentence": str(i[0]), "active": determineTrue(i[1]), "percentage": float(i[2])})
+                baseParagraphList.append({"baseSentence": str(i[0]), "active": determineTrue(i[1]), "percentage": float(i[2]), "url": str(i[3])})
                 if (float(i[2]) > 0):
                     perCounter = perCounter + 1
             totalPercentage = float((perCounter / len(reportArray)) * 100)
             responseObject = {}
             responseObject['author'] = request.values['name']
             responseObject['totalPercentage'] = totalPercentage
-            responseObject['status'] = 'Passed' if totalPercentage > 50 else 'Failed'
+            responseObject['status'] = 'Passed' if totalPercentage < 50 else 'Failed'
             responseObject['uploadDate'] = datetime.now().strftime("%d/%m/%Y %H:%M")
             responseObject['fileName'] = file.filename
             responseObject['isSecondTrial'] = True
