@@ -22,7 +22,7 @@ v-if="state.loading">
         <h2 style="color: rgb(0, 0, 0);">OAPS REPORT</h2>
         <h4
         style="color: rgb(0, 0, 0);"
-        >Plagirism Percentage: {{ state.Report.data.totalPercentage.$numberDecimal }} %
+        >Plagirism Percentage: {{ state.Report.data.totalPercentage.$numberDecimal.slice(0,5) }} %
         </h4>
         <table border="1" class="m-3">
           <thead>
@@ -48,13 +48,19 @@ v-if="state.loading">
           </tbody>
         </table>
         <p v-for="index in state.Report.data.baseParagraph" :key="index" class="inlineDisplay">
-          <span
-            v-if="index.active && index.percentage.$numberDecimal >= 0 &&
+          <span class="dropdown"
+          v-if="index.active && index.percentage.$numberDecimal >= 0 &&
             ((index.percentage.$numberDecimal - 0.5) / 0.5) * 100 >
-            state.filterCounter"
-            style="background-color:#FFF000"
-            >{{ index.baseSentence + " " }}</span
-          >
+            state.filterCounter">
+            <a href="#" style="background-color:#FFF000"
+             id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{ index.baseSentence + " " }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li><a class="dropdown-item" v-bind:href='index.url'>{{ index.url }}</a></li>
+            </ul>
+          </span>
+
           <span v-if="!index.active">{{ index.baseSentence + " " }}</span>
         </p>
       </div>

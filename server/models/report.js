@@ -19,6 +19,7 @@ const reportSchema = new schema({
         baseSentence: { type: String },
         active: { type: Boolean },
         percentage: { type: mongoose.Schema.Types.Decimal128 },
+        url: { type: String },
       }],
     },
   
