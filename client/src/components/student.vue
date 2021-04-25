@@ -40,6 +40,7 @@
                     <tr>
                       <th scope="col">Name</th>
                       <th scope="col">Code</th>
+                      <th scope="col">Note</th>
                       <th scope="col"></th>
                     </tr>
                   </thead>
@@ -47,6 +48,8 @@
                     <tr v-for="report in state.user.reports" :key="report">
                       <td>{{report.assignmentName}}</td>
                       <td>{{report.assignmentCode}}</td>
+                      <td v-if="report.status !== 'Second Trial'"></td>
+                      <td v-if="report.status === 'Second Trial'" class="badge bg-warning text-dark">Old Report, Second Trial Allowd</td>
                       <td>
                         <button
                           type="button"
@@ -72,13 +75,20 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="assignment in state.user.submittedAssignments" :key="assignment">
+                    <tr v-for="assignment in state.submittedAssignments" :key="assignment">
                       <td class="badge bg-success mt-sm-2"
                       v-if="assignment.status == 'Passed'">{{assignment.status}}</td>
                       <td class="badge bg-danger mt-sm-2"
                       v-if="assignment.status == 'Failed'">{{assignment.status}}</td>
-                      <td class="badge bg-warning mt-sm-2"
+                      <td class="badge bg-warning text-dark mt-sm-2"
                       v-if="assignment.status == 'Second Trial'">{{assignment.status}}</td>
+                      <td class="badge bg-primary mt-sm-2 mx-sm-1"
+                      v-if="assignment.status !== 'Second Trial' &&
+                      assignment.reportID.isSecondTrial">Second Trial</td>
+                      <td class="badge bg-warning text-dark mt-sm-2 mx-sm-1"
+                        v-if="assignment.status !== 'Second Trial' &&
+                        assignment.reportID.isSecondTrial && assignment.reportID.previousPercentage">
+                        Last Percentage: {{assignment.reportID.previousPercentage.$numberDecimal.slice(0,5)}} %</td>
                       <td>{{assignment.assignmentName}}</td>
                       <td>{{assignment.assignmentCode}}</td>
                       <td>{{assignment.submissionDate}}</td>
@@ -104,6 +114,8 @@
 </template>
 
 <script>
+/* eslint-disable max-len */
+/* eslint-disable prefer-const */
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -135,7 +147,14 @@ export default {
       assignmentButtonClass: 'btn-primary',
       reportButtonClass: 'btn-primary',
       titleState: 'Courses',
+      submittedStudents: null,
     });
+    if (state.value.user) {
+      let secondTrialAss = state.value.user.submittedAssignments.filter((x) => x.status === 'Second Trial');
+      let notSecondTrialAss = state.value.user.submittedAssignments.filter((y) => y.status !== 'Second Trial');
+      let difference = secondTrialAss.filter((y) => !notSecondTrialAss.some((i) => i.AssignmentID === y.AssignmentID));
+      state.value.submittedAssignments = notSecondTrialAss.concat(difference);
+    }
     function toggleAssignments() {
       state.value.assignmentButtonClass = 'btn-warning';
       state.value.reportButtonClass = 'btn-primary';

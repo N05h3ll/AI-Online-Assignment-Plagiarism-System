@@ -15,6 +15,7 @@ const user = new schema({
   enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'course' }],
   submittedAssignments: [
     {
+      reportID: { type: mongoose.Schema.Types.ObjectId, ref: 'report' },
       assignmentID: { type: mongoose.Schema.Types.ObjectId, ref: 'assignment' },
       submissionDate: { type: String },
       status: { type: String },

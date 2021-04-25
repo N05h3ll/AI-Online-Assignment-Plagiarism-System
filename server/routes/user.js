@@ -105,11 +105,14 @@ router.post("/login", function (req, res, next) {
     populate('reports').
     populate('submittedAssignments').populate('createdCourses').
     populate('enrolledCourses').
-    exec((error, found) => {
+    exec(async (error, found) => {
     if (error) {
       res.status(401).send('NO USER FOUND!')
     } else if (found) {
-       return res.status(200).send({ success: "TRUE", user: found });
+      await User.populate(found, { path: 'submittedAssignments', populate: 'reportID' }, (error, popFound) => {
+        if (error) { return res.status(500).send('Internal Server Error!') }
+        return res.status(200).send({ success: "TRUE", user: popFound });
+      })
     }
   })
       }
@@ -125,11 +128,14 @@ router.get('/user', utils.isLoggedIn, async (req,res)=>{
     populate('reports').
     populate('submittedAssignments').populate('createdCourses').
     populate('enrolledCourses').
-    exec((error, user) => {
+    exec(async (error, user) => {
     if (error) {
       res.status(401).send('NO USER FOUND!')
     } else if (user) {
-      res.send(user)
+      await User.populate(user, { path: 'submittedAssignments', populate: 'reportID' }, (error, popFound) => {
+        if (error) { return res.status(500).send('Internal Server Error!') }
+        return res.status(200).send(popFound);
+      })
     }
   })
 })

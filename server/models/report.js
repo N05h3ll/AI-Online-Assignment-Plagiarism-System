@@ -6,6 +6,7 @@ const reportSchema = new schema({
   email: { type: String },
   uploadDate: { type: String },
   totalPercentage: { type: mongoose.Schema.Types.Decimal128 },
+  previousPercentage: { type: mongoose.Schema.Types.Decimal128 },
   status: { type: String },
   isSecondTrial: { type: Boolean },
   fileName: { type: String },
