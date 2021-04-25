@@ -1,11 +1,12 @@
 <template>
+<!-- eslint-disable max-len  -->
 <assignmentsSearch v-if="state.titleState === 'Assignments'"/>
 <coursesSearch v-if="state.titleState === 'Courses'"/>
     <!-- STUDENT -->
     <div class="container-fluid row">
                 <div class="row align-items-center">
             <div class="col">
-              <div class="d-grid gap-3 col-4 ">
+              <div class="d-grid gap-3 col ">
                 <button
                   v-bind:class="'btn btn-lg '+ state.courseButtonClass"
                   type="button"
@@ -29,7 +30,7 @@
               </div>
             </div>
             <courses-container v-if="state.titleState === 'Courses'"/>
-            <div class="col-10 rounded" id="registerationFormContanier"
+            <div class="col-9 rounded" id="registerationFormContanier"
             v-if="state.titleState !== 'Courses'">
               <h2 class="h2 m-3 text-dark">{{state.titleState}}</h2>
               <div class="table-responsive overflow-scroll">
