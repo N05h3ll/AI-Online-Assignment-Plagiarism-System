@@ -16,6 +16,9 @@
         <div class="alert alert-warning" role="alert" v-if='state.error'>
           {{state.error}}
         </div>
+        <div class="alert alert-success" role="alert" v-if='state.success'>
+          Account Registred Successfully
+        </div>
         <form class="m-3"  @submit.prevent="register">
           <div class="form-floating mb-3">
             <input
@@ -123,6 +126,7 @@ export default {
       lastName: '',
       institution: '',
       error: '',
+      success: null,
     });
     const router = useRouter();
     function register() {
@@ -138,8 +142,11 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       };
-      axios.post('http://127.0.0.1:3000/api/user/register', registerData, config).then(() => {
-        router.push('Login');
+      axios.post('http://127.0.0.1:3000/api/user/register', registerData, config).then(async () => {
+        state.value.success = true;
+        await setTimeout(() => {
+          router.push({ name: 'Login' });
+        }, 3000);
       }).catch((error) => {
         state.value.error = error.response.data.error;
       });

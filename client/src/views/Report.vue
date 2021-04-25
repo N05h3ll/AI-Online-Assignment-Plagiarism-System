@@ -18,32 +18,35 @@ v-if="state.loading">
   </div>
   <div class="container" id="middleContainer" v-if="state.Report.data && !state.loading">
     <div class="row" id="registerationFormContanier">
+        <h1 class="text-center" style="color: #000000">OAPS REPORT</h1>
       <div class="col-lg-8 me-sm-3 align-self-center">
-        <h2 style="color: rgb(0, 0, 0);">OAPS REPORT</h2>
-        <h4
+        <h3
         style="color: rgb(0, 0, 0);"
-        >Plagirism Percentage: {{ state.Report.data.totalPercentage.$numberDecimal.slice(0,5) }} %
-        </h4>
-        <table border="1" class="m-3">
+        >Plagirism Percentage: <strong>
+          {{ state.Report.data.totalPercentage.$numberDecimal.slice(0,5) }} %</strong>
+        </h3>
+       <table border="2" class="m-3 mb-3" style="width: 80%;">
           <thead>
             <tr>
-              <th scope="col">Date:</th>
-              <td>{{ state.Report.data.uploadDate }}</td>
+              <th scope="row">Author:</th>
+              <td class="h3">{{ state.Report.data.author }}</td>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th scope="row">Author</th>
-              <td>{{ state.Report.data.author }}</td>
+              <th scope="col">Date:</th>
+              <td class="h4">{{ state.Report.data.uploadDate }}</td>
             </tr>
             <tr>
-              <th scope="row">File Name</th>
-              <td>{{ state.Report.data.fileName }}</td>
+              <th scope="row">File Name:</th>
+              <td class="h5">{{ state.Report.data.fileName }}</td>
             </tr>
             <tr>
-              <th scope="row" class="text-primary" v-if="state.Report.data.isSecondTrial">
+              <th scope="row"
+              style="color: #FF0000;" v-if="state.Report.data.isSecondTrial">
                 Second Trail
               </th>
+              <td> </td>
             </tr>
           </tbody>
         </table>
@@ -52,7 +55,7 @@ v-if="state.loading">
           v-if="index.active && index.percentage.$numberDecimal >= 0 &&
             ((index.percentage.$numberDecimal - 0.5) / 0.5) * 100 >
             state.filterCounter">
-            <a href="#" style="background-color:#FFF000"
+            <a href="#" style="background-color:#e66a6a" class="text-dark"
              id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                       {{ index.baseSentence + " " }}
             </a>

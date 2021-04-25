@@ -29,7 +29,7 @@ const routes = [
     component: Login,
   },
   {
-    path: "/upload/:cID/:assid",
+    path: "/upload/:cID/:ST/:assid",
     name: "Upload",
     component: Upload,
   },

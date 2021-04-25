@@ -119,13 +119,15 @@ router.get('/getassignment/:assid', utils.isLoggedIn, async (req, res) => {
   })
 })
 router.get('/:assid/getsubmittedstudents', utils.isLoggedIn, (req, res) => {
-	Assignment.findById(req.params.assid, (error, students) => {
+	Assignment.findById(req.params.assid).populate({
+		path: 'submittedStudents',
+		populate: 'reportID'
+	}).exec((error, students) => {
 		if (error) {
 			res.status(500).send('Internal Server Error!')
 		} else if (students.submittedStudents.length == 0) {
 			res.status(404).send("No Submissions Yet ...");
 		} else if (students.submittedStudents.length !== 0) {
-
 			res.status(200).send(students.submittedStudents)
 		}
 	})
@@ -159,7 +161,7 @@ router.get('/:assID/allow/:stuID/rep/:repID', utils.isLoggedIn, (req, res) => {
 		}}, (error, ass) => {
 		if (error) { return res.status(500).send('Internal Server Error') }
 		
-			Report.findByIdAndUpdate(req.params.repID, { status: 'Second Trial', isSecondTrial: true }, (error) => {
+			Report.findByIdAndUpdate(req.params.repID, { status: 'Second Trial' }, (error) => {
 				if (error) { return res.status(500).send('Internal Server Error!') }
 				User.findOneAndUpdate({ _id: req.params.stuID, 'submittedAssignments.assignmentID': req.params.assID },
 					{

@@ -3,7 +3,7 @@
 
           <div class="row align-items-center">
             <div class="col">
-              <div class="d-grid gap-3 col-5 ">
+              <div class="d-grid gap-3 col ">
                 <button
                   class="btn btn-lg btn-warning"
                   type="button"

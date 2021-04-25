@@ -1,5 +1,5 @@
 <template>
-            <div class="col-10 rounded me-sm-3" id="registerationFormContanier">
+            <div class="col-9 rounded me-sm-3" id="registerationFormContanier">
               <h2 class="h2 m-3 text-dark">Courses</h2>
               <div class="table-responsive overflow-scroll">
                 <table class="table" v-if="state.listOfCourses">

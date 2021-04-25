@@ -13,7 +13,6 @@ let transporter = nodemailer.createTransport({
   }
 });
 router.get('/getallreports', utils.isLoggedIn, async (req, res) => {
-  console.log(req.session.passport.user)
   await User.findOne({ email: req.session.passport.user }, async (err, user) => {
     if (err) {
       res.status(500).send("internal server error! " + error);
@@ -67,10 +66,8 @@ router.get('/emailreport/:repid', utils.isLoggedIn, async (req, res) => {
               }()}
       </p>`
             };
-            console.log(mailOptions)
       transporter.sendMail(mailOptions, function(error, info){
               if (error) {
-                console.log(error);
               } else {
                 console.log('Email sent: ' + info.response);
               }
@@ -78,42 +75,57 @@ router.get('/emailreport/:repid', utils.isLoggedIn, async (req, res) => {
     }
   })
 })
-router.post('/addreport', (req,res)=>{
-  console.log(req.body)
-  rep = new Report(req.body);
-  rep.save((err, report) => {
-    if (err) {console.log(err)}
-    User.findOneAndUpdate({email: req.body.email},
-      {
-        $push: {
-          reports: report._id,
-          submittedAssignments: {
-            assignmentID: req.body.assignmentID,
-            assignmentName: req.body.assignmentName,
-            assignmentCode: req.body.assignmentCode,
-            courseID: report.courseID,
-            submissionDate: report.uploadDate,
-            status: report.status
-          }
-        }
-      }, (err, user) => {
-        if (err) { console.log(err) }
-        Assignment.findByIdAndUpdate(report.assignmentID, {
+
+router.post('/addreport', async (req,res)=>{
+  dumpReport = req.body;
+  function saveReport(saveRep) {
+    rep = new Report(saveRep);
+    rep.save((err, report) => {
+      if (err) {return res.status(500).send("Internal Server Error1")}
+      User.findOneAndUpdate({email: req.body.email},
+        {
           $push: {
-            submittedStudents: {
-              studentdID: user._id,
-              studentdName: user.name,
+            reports: report._id,
+            submittedAssignments: {
+              reportID: report._id,
+              assignmentID: req.body.assignmentID,
+              assignmentName: req.body.assignmentName,
+              assignmentCode: req.body.assignmentCode,
+              courseID: report.courseID,
               submissionDate: report.uploadDate,
-              status: report.status,
-              reportID: report._id
+              status: report.status
             }
           }
-        }, (err) => {
-            if(err){console.log(err)}
-          res.send('done')
-        })
-    })
-  });
+        }, (err, user) => {
+          if (err) { return res.status(500).send("Internal Server Error1") }
+          Assignment.findByIdAndUpdate(report.assignmentID, {
+            $push: {
+              submittedStudents: {
+                studentdID: user._id,
+                studentdName: user.name,
+                submissionDate: report.uploadDate,
+                status: report.status,
+                reportID: report._id
+              }
+            }
+          }, (err) => {
+              if(err){return res.status(500).send("Internal Server Error1")}
+            return res.send('done')
+          })
+      })
+    });
+  }
+  if (dumpReport.isSecondTrial == 'true') {
+     await Report.findOne({ assignmentID: dumpReport.assignmentID, email: dumpReport.email },  (error, foundReport) => {
+      if (error) { return res.status(500).send('Internal Server Error') }
+      if (foundReport) {
+        dumpReport['previousPercentage'] = foundReport.totalPercentage.toString();
+        saveReport(dumpReport)
+            }
+          })
+  }
+  else if(dumpReport !== 'true'){saveReport(dumpReport)}
+  
 })
 
 module.exports = router
