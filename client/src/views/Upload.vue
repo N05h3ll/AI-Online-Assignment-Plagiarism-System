@@ -115,6 +115,7 @@ export default {
       form.append('name', state.value.user.name);
       form.append('assignmentID', route.params.assid);
       form.append('courseID', route.params.cID);
+      form.append('secondTrial', route.params.ST);
       form.append('assignmentName', state.value.Assignment.data.name);
       form.append('assignmentCode', state.value.Assignment.data.code);
       axios.post('http://127.0.0.1:5000', form, {
