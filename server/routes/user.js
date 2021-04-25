@@ -157,4 +157,18 @@ router.get('/gettas', utils.isLoggedIn, (req, res) => {
   })
  })
 
+router.get('/getinactiveusers', utils.isLoggedIn, (req, res) => {
+  User.find({ active: false, $or: [{accType: 'Module Coordinator'}, {accType: 'Teacher Assistant'}] } ).exec((error, users) => {
+    if (error) { return res.status(500).send("Internal Server Error!") }
+    return res.status(200).send(users);
+  })
+})
+router.get('/activate/:uid', utils.isLoggedIn, (req, res) => {
+  User.updateOne({ _id: req.params.uid }, { active: true }, (error, user) => {
+    if (error) { return res.status(500).send("Internal Server Error!") }
+    else if (!user || user.length == 0) { return res.status(400).send("User not found!") }
+    return res.status(200).send('done');
+  })
+})
+
 module.exports = router;
