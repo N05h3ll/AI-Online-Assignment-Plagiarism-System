@@ -109,7 +109,7 @@ def index():
             responseObject['status'] = 'Passed' if totalPercentage < 50 else 'Failed'
             responseObject['uploadDate'] = datetime.now().strftime("%d/%m/%Y %H:%M")
             responseObject['fileName'] = file.filename
-            responseObject['isSecondTrial'] = True
+            responseObject['isSecondTrial'] = request.values['secondTrial']
             responseObject['baseParagraph'] = baseParagraphList
             responseObject['email'] = request.values['user']
             responseObject['assignmentID'] = request.values['assignmentID']
