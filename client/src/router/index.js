@@ -11,6 +11,9 @@ import addCourse from '../views/addCourse.vue';
 import Course from '../views/Course.vue';
 import Help from '../views/Help.vue';
 import moduleCoordinatorAssignments from '../views/moduleCoordinatorAssignments.vue';
+import STUHelp from '../views/STUHelp.vue';
+import TAHelp from '../views/TAHelp.vue';
+import MCHelp from '../views/MCHelp.vue';
 
 const routes = [
   {
@@ -70,6 +73,21 @@ const routes = [
     path: "/help",
     name: 'Help',
     component: Help,
+  },
+  {
+    path: "/help/student",
+    name: 'Student Help',
+    component: STUHelp,
+  },
+  {
+    path: "/help/TeacherAssistant",
+    name: 'TA Help',
+    component: TAHelp,
+  },
+  {
+    path: "/help/ModuleCoordinator",
+    name: 'MC Help',
+    component: MCHelp,
   },
 ];
 
