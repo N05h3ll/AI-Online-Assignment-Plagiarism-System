@@ -41,7 +41,7 @@ v-if="(state.user.accType == 'Module Coordinator'
           <td class="badge bg-info text-dark mt-sm-2 mx-sm-1"
           v-if="student.status !== 'Second Trial' &&
           student.reportID.isSecondTrial && student.reportID.previousPercentage">
-          Last Percentage: {{student.reportID.previousPercentage.$numberDecimal.slice(0,5)}} %</td>
+          Previous Percentage: {{student.reportID.previousPercentage.$numberDecimal.slice(0,5)}} %</td>
           <td>
             <button
               type="button"
