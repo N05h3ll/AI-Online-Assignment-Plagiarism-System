@@ -88,7 +88,7 @@
                       <td class="badge bg-warning text-dark mt-sm-2 mx-sm-1"
                         v-if="assignment.status !== 'Second Trial' &&
                         assignment.reportID.isSecondTrial && assignment.reportID.previousPercentage">
-                        Last Percentage: {{assignment.reportID.previousPercentage.$numberDecimal.slice(0,5)}} %</td>
+                        Previous Percentage: {{assignment.reportID.previousPercentage.$numberDecimal.slice(0,5)}} %</td>
                       <td>{{assignment.assignmentName}}</td>
                       <td>{{assignment.assignmentCode}}</td>
                       <td>{{assignment.submissionDate}}</td>
