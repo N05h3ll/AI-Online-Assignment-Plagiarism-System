@@ -31,6 +31,7 @@
 <student v-if="state.user && state.user.accType == 'Student'" :user="state.user"/>
 <TA v-if="state.user && state.user.accType === 'Teacher Assistant'"/>
 <adminPanel v-if="state.user && state.user.accType === 'Admin'"/>
+<writer v-if="state.user && state.user.accType === 'Writer'"/>
 </div>
 </template>
 
@@ -42,6 +43,7 @@ import student from '../components/student.vue';
 import TA from '../components/TA.vue';
 import coursesHome from '../components/coursesHome.vue';
 import adminPanel from '../components/adminPanel.vue';
+import writer from '../components/writer.vue';
 
 export default {
   name: 'Home',
@@ -50,6 +52,7 @@ export default {
     student,
     TA,
     adminPanel,
+    writer,
   },
   setup() {
     const store = useStore();
