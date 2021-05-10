@@ -38,7 +38,7 @@ v-if="state.user && (state.searchResult || state.searchError)">
 </div>
 <!-- END SEARCH OVERLAY -->
  <!--search box-->
-    <div class="w-25 float-end row">
+    <div class="w-25 float-end row mt-sm-3">
       <div class="input-group mb-3">
         <input
           type="text"

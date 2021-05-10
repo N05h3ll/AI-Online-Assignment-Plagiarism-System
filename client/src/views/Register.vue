@@ -2,14 +2,16 @@
   <div class="container" id="middleContainer">
     <div class="row">
       <div class="col me-sm-3 align-self-center">
-        <h2 class="h2 text-white">AI Online Assignment Plagiarism System</h2>
-        <p class="text-white">
+        <h2 class="h2 text-dark">AI Online Assignment Plagiarism System</h2>
+        <p class="text-dark">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget eros sapien.
           Pellentesque vulputate sed ligula quis dapibus. Proin varius metus ac lorem egestas, id
           aliquam eros dapibus. Aliquam tempus sem ut sem pellentesque, id varius turpis vulputate.
           Proin malesuada sit amet neque nec hendrerit. Phasellus eu tortor lorem. Fusce vehicula
           efficitur ultrices.
         </p>
+        <img class="img-fluid"
+        src="../../public/Home-Image.png" style="max-height: 50vh;"/>
       </div>
       <div class="col rounded me-sm-3" id="registerationFormContanier">
         <h2 class="h2 m-3 text-dark">Create a new account</h2>

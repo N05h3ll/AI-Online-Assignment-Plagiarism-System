@@ -47,7 +47,10 @@
   <div class="spinner-grow align-self-center text-secondary" role="status"></div>
   <div class="spinner-grow align-self-center text-success" role="status"></div>
   <div class="spinner-grow align-self-center text-danger" role="status"></div>
-  <div class="align-self-center mx-2">PLease wait, while checking your document ...</div>
+  <div class="align-self-center mx-2">PLease wait, while checking your document ...
+    <br>
+    This may take up to 20 minutes.
+  </div>
   </div>
 </div>
 <!-- END LOADING SPINNERS -->

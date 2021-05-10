@@ -1,7 +1,7 @@
 <template>
             <div class="col-9 rounded me-sm-3" id="registerationFormContanier">
-              <h2 class="h2 m-3 text-dark">Courses</h2>
-              <div class="table-responsive overflow-scroll">
+              <h2 class="h2 m-3 text-dark">My Courses</h2>
+              <div class="table-responsive overflow-scroll" style="height: 40rem;">
                 <table class="table" v-if="state.listOfCourses">
                   <thead>
                     <tr>
@@ -37,9 +37,9 @@
             </div>
 
         <div v-if="state.user.accType === 'Module Coordinator'"
-        >
+        class="text-center">
     <router-link :to="{ name: 'addCourse' }">
-    <button class="btn btn-success float-end m-lg-5">Add new course</button>
+    <button class="btn btn-lg btn-success m-lg-4">Add new course</button>
     </router-link>
         </div>
 </template>
@@ -89,6 +89,6 @@ export default {
 
 <style scoped>
 .table-responsive {
-  max-height: 50vh;
+  max-height: 55vh;
 }
 </style>

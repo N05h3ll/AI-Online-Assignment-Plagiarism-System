@@ -42,7 +42,7 @@ v-if="state.user.accType === 'Student' && (state.searchResult || state.searchErr
 </div>
 <!-- END SEARCH OVERLAY -->
  <!--search box-->
-    <div class="w-25 float-end row" v-if="state.user.accType === 'Student'">
+    <div class="w-25 float-end row mt-sm-3" v-if="state.user.accType === 'Student'">
       <div class="input-group mb-3">
         <input
           type="text"

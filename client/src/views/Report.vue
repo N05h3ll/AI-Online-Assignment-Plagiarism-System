@@ -1,4 +1,5 @@
 <template>
+<!-- eslint-disable max-len  -->
 <div class="d-flex justify-content-center spinner"
 v-if="state.loading">
 <div class="align-self-center h1">
@@ -22,8 +23,10 @@ v-if="state.loading">
       <div class="col-lg-8 me-sm-3 align-self-center">
         <h3
         style="color: rgb(0, 0, 0);"
-        >Plagirism Percentage: <strong>
+        >Plagirism Percentage: <strong v-if="filterList.length === 0">
           {{ state.Report.data.totalPercentage.$numberDecimal.slice(0,5) }} %</strong>
+           <strong v-if="filterList.length !== 0">
+          {{ Math.round(state.Report.data.totalPercentage.$numberDecimal - (100 - (((state.Report.data.baseParagraph.length - filterList.length)/state.Report.data.baseParagraph.length)*100))) }} %</strong>
         </h3>
        <table border="2" class="m-3 mb-3" style="width: 80%;">
           <thead>

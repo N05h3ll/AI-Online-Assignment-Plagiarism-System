@@ -66,16 +66,16 @@ v-if="(state.user.accType == 'Module Coordinator'
        </tr>
       </table>
 
-      <div class="float-end"><button class="btn m-3 btn-primary"
+</div>
+      <div class="text-center"><button class="btn m-3 btn-lg btn-primary"
       v-if="state.user.accType === 'Module Coordinator' || state.user.accType === 'Student'
       || state.user.accType === 'Teacher Assistant'"
       @click="getAssignments">View Assignments</button>
-<button class="btn m-3 btn-primary"
+<button class="btn m-3 btn-lg btn-primary"
       v-if="state.user.accType === 'Module Coordinator'
       || state.user.accType === 'Teacher Assistant'"
       @click="getEnrolledStudents">View Enrolled Students</button>
     </div>
-</div>
 </template>
 
 <script>
