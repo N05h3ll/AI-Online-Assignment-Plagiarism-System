@@ -182,6 +182,7 @@ export default {
       }).catch((error) => {
         state.value.submittedStudents = null;
         state.value.submissionError = error.response.data;
+        state.value.loading = false;
       });
     }
     function getReport(repID) {
