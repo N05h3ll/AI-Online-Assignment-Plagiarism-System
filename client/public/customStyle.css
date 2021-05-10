@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(180deg, rgba(38, 41, 47, 0.94) 40%, rgba(38, 41, 47, 0) 100%) no-repeat  fixed;
+    background: #D9D7D7 no-repeat  fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -7,6 +7,7 @@ body {
   }
 #registerationFormContanier {
     background-color: rgba( 255, 255, 255, 0.7);
+    margin-top: 2vh;
 }
 #middleContainer{
     margin-top: 3.5%;
@@ -17,4 +18,11 @@ body {
     width: 100%;
     height: calc(100% - 8vh);
     background: rgba(255, 255, 255, 0.9)  center center no-repeat;
+}
+
+.start-50 {
+    margin-left: -5%;
+}
+.navbar-brand {
+    margin-left: 1%;
 }

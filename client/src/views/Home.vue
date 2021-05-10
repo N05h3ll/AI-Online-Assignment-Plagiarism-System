@@ -3,13 +3,15 @@
 <div class="container-fluid ">
   <div v-if="!state.user">
     <!--welcome-->
-    <div class="container mt-5">
-      <h1 class="text-white">Welcome To,  Online Assigment Plagiarsim System</h1>
-      <p class="text-white">
+    <div class="container mt-lg-5">
+      <h1 class="text-dark">Welcome To,  Online Assigment Plagiarsim System</h1>
+      <p class="text-dark">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget eros sapien.
         Pellentesque vulputate sed ligula quis dapibus. Proin varius metus ac lorem egestas, id
         aliquam eros dapibus.
       </p>
+      <img class="img-fluid mx-auto d-block"
+      src="../../public/Home-Image.png" style="max-height: 50vh;"/>
     </div>
     <!--/welocme-->
     <!--Buttons-->
@@ -20,9 +22,6 @@
       <router-link :to="{ name: 'Login' }">
         <button type="button" class="btn btn-success btn-lg me-sm-5 ">Login</button>
       </router-link>
-      <button type="button" class="btn btn-outline-warning btn-lg me-sm-5">
-        Continue as free user
-      </button>
     </div>
   </div>
 
@@ -31,6 +30,7 @@
 <student v-if="state.user && state.user.accType == 'Student'" :user="state.user"/>
 <TA v-if="state.user && state.user.accType === 'Teacher Assistant'"/>
 <adminPanel v-if="state.user && state.user.accType === 'Admin'"/>
+<writer v-if="state.user && state.user.accType === 'Writer'"/>
 </div>
 </template>
 
@@ -42,6 +42,7 @@ import student from '../components/student.vue';
 import TA from '../components/TA.vue';
 import coursesHome from '../components/coursesHome.vue';
 import adminPanel from '../components/adminPanel.vue';
+import writer from '../components/writer.vue';
 
 export default {
   name: 'Home',
@@ -50,6 +51,7 @@ export default {
     student,
     TA,
     adminPanel,
+    writer,
   },
   setup() {
     const store = useStore();

@@ -5,10 +5,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 var history = require('connect-history-api-fallback');
-app.use(cors({origin: [
-  'http://localhost:8080',
-  'http://127.0.0.1:8080'
-],credentials: true,
+app.use(cors({origin: process.env.ORIGINS.split(','),credentials: true,
   exposedHeaders: ['set-cookie']}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -27,7 +24,7 @@ app.use(
   })
 );
 // connect to db
-mongoose.connect("mongodb://mongo:27017/test", {
+mongoose.connect(process.env.MONGODBURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -54,6 +51,7 @@ app.use('/api/user', userRoute);
 app.use('/api/report', reportRoute)
 app.use('/api/assignment', assignmentRoute);
 app.use('/api/course', courseRoute);
-app.listen(3000, () => {
+app.listen(process.env.BACKPORT, () => {
+  console.log(process.env.ORIGINS.split(','))
   console.log("app listining on 127.0.0.1:3000");
 });

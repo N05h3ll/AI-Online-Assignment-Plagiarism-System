@@ -1,17 +1,8 @@
 <template>
 <div class="container-fluid row" id="middleContainer">
 
-          <div class="row align-items-center">
-            <div class="col">
-              <div class="d-grid gap-3 col-5 ">
-                <button
-                  class="btn btn-lg btn-warning"
-                  type="button"
-                >
-                  Assignments
-                </button>
-              </div>
-            </div>
+          <div class="row align-items-center justify-content-center">
+
             <div class="col-10 rounded me-sm-3" id="registerationFormContanier">
               <h2 class="h2 m-3 text-dark">Course: {{state.course.courseName}}</h2>
               <h3 class="h3 m-3 text-dark">Assignments</h3>
@@ -46,10 +37,10 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="text-center">
     <router-link :to="{ name: 'AddAssignment', params: { courseID: state.course._id } }"
     v-if="state.user.accType === 'Module Coordinator'">
-    <button class="btn btn-success float-end m-lg-5">Allocate a new assignment</button>
+    <button class="btn btn-lg btn-success m-lg-5">Allocate a new assignment</button>
     </router-link>
         </div>
 

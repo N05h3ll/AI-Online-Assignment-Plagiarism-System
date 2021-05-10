@@ -66,16 +66,16 @@ v-if="(state.user.accType == 'Module Coordinator'
        </tr>
       </table>
 
-      <div class="float-end"><button class="btn m-3 btn-primary"
+</div>
+      <div class="text-center"><button class="btn m-3 btn-lg btn-primary"
       v-if="state.user.accType === 'Module Coordinator' || state.user.accType === 'Student'
       || state.user.accType === 'Teacher Assistant'"
       @click="getAssignments">View Assignments</button>
-<button class="btn m-3 btn-primary"
+<button class="btn m-3 btn-lg btn-primary"
       v-if="state.user.accType === 'Module Coordinator'
       || state.user.accType === 'Teacher Assistant'"
       @click="getEnrolledStudents">View Enrolled Students</button>
     </div>
-</div>
 </template>
 
 <script>
@@ -96,7 +96,7 @@ export default {
       enrolledStudents: null,
       enrolledError: null,
     });
-    axios.get(`http://127.0.0.1:3000/api/course/getcourse/${route.params.cID}`).then((response) => {
+    axios.get(`${process.env.VUE_APP_BACKENDURL}/api/course/getcourse/${route.params.cID}`).then((response) => {
       state.value.course = response.data;
       store.dispatch('Course/setCourse', response.data);
       state.value.loading = false;

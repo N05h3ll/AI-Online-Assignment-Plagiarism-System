@@ -1,4 +1,5 @@
 <template>
+<!-- eslint-disable max-len  -->
 <div class="d-flex justify-content-center spinner"
 v-if="state.loading">
 <div class="align-self-center h1">
@@ -22,8 +23,10 @@ v-if="state.loading">
       <div class="col-lg-8 me-sm-3 align-self-center">
         <h3
         style="color: rgb(0, 0, 0);"
-        >Plagirism Percentage: <strong>
+        >Plagirism Percentage: <strong v-if="filterList.length === 0">
           {{ state.Report.data.totalPercentage.$numberDecimal.slice(0,5) }} %</strong>
+           <strong v-if="filterList.length !== 0">
+          {{ Math.round(state.Report.data.totalPercentage.$numberDecimal - (100 - (((state.Report.data.baseParagraph.length - filterList.length)/state.Report.data.baseParagraph.length)*100))) }} %</strong>
         </h3>
        <table border="2" class="m-3 mb-3" style="width: 80%;">
           <thead>
@@ -110,7 +113,7 @@ export default {
       loading: true,
       readmore: false,
     });
-    axios.get(`http://127.0.0.1:3000/api/report/getreport/${route.params.repid}`).then((report) => {
+    axios.get(`${process.env.VUE_APP_BACKENDURL}/api/report/getreport/${route.params.repid}`).then((report) => {
       store.dispatch('Report/setReport', report);
       state.value.loading = false;
     });
@@ -137,7 +140,7 @@ export default {
     }
     function sendReport() {
       // eslint-disable-next-line no-underscore-dangle
-      axios.get(`http://127.0.0.1:3000/api/report/emailreport/${state.value.Report.data._id}`);
+      axios.get(`${process.env.VUE_APP_BACKENDURL}/api/report/emailreport/${state.value.Report.data._id}`);
     }
     return {
       state,

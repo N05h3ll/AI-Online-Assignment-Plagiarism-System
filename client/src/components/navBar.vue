@@ -1,13 +1,13 @@
 <template>
           <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item">
-            <button class="btn btn-outline-light me-sm-3" type="submit">
+            <button class="btn btn-link text-light me-sm-3" type="submit">
               About Us
             </button>
           </li>
           <li class="nav-item">
             <router-link :to="{name: 'Help'}">
-          <button class="btn btn-outline-light me-sm-5" type="submit">
+          <button class="btn btn-link text-light   me-sm-5" type="submit">
               Help!
             </button>
         </router-link>
@@ -15,16 +15,14 @@
             <li class="nav-item">
               <router-link :to="{name:'Home'}">
                 <button
-                class="btn btn-outline-warning me-sm-3"
+                class="btn btn-outline-light me-sm-3"
                 v-if="state.user">{{state.user.name}}</button>
-                <button class="btn btn-outline-success me-sm-3" v-else>Login</button>
               </router-link>
             </li>
             <li class="nav-item">
               <router-link :to="{name: 'Register'}">
                 <button
                 class="btn btn-danger me-sm-3" v-if="state.user" @click="logout">Logout</button>
-                <button class="btn btn-success me-sm-3" v-else>Register</button>
               </router-link>
             </li>
         </ul>
@@ -43,7 +41,7 @@ export default {
       user: computed(() => store.state.User.user),
     });
     (async function getUser() {
-      await axios.get('http://127.0.0.1:3000/api/user/user').then((res) => {
+      await axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/user`).then((res) => {
         console.log(res.data);
         store.dispatch('User/setUser', res.data);
       }).catch(() => {
@@ -56,7 +54,7 @@ export default {
       setTimeout(getUser, 30000);
     }());
     async function logout() {
-      await axios.get('http://127.0.0.1:3000/api/user/logout').then(() => {
+      await axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/logout`).then(() => {
         store.dispatch('User/setUser', null);
         router.push('login');
       }).catch(() => { store.dispatch('User/setUser', null); });

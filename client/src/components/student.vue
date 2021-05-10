@@ -3,7 +3,7 @@
 <assignmentsSearch v-if="state.titleState === 'Assignments'"/>
 <coursesSearch v-if="state.titleState === 'Courses'"/>
     <!-- STUDENT -->
-    <div class="container-fluid row">
+    <div class="container-fluid row mt-4">
                 <div class="row align-items-center">
             <div class="col">
               <div class="d-grid gap-3 col ">
@@ -12,20 +12,20 @@
                   type="button"
                   @click="toggleCourses"
                 >
-                Courses</button>
+                My Courses</button>
                 <button
                   v-bind:class="'btn btn-lg '+ state.assignmentButtonClass"
                   type="button"
                   @click="toggleAssignments"
                 >
-                  Assigment
+                  My Assigment
                 </button>
                 <button
                   v-bind:class="'btn btn-lg '+ state.reportButtonClass"
                   type="button"
                   @click="toggleReports"
                 >
-                  Reports
+                  My Reports
                 </button>
               </div>
             </div>
@@ -33,9 +33,9 @@
             <div class="col-9 rounded" id="registerationFormContanier"
             v-if="state.titleState !== 'Courses'">
               <h2 class="h2 m-3 text-dark">{{state.titleState}}</h2>
-              <div class="table-responsive overflow-scroll">
+              <div class="table-responsive overflow-scroll" style="height: 40rem;">
                 <!-- Reports TABLE -->
-                <table class="table" v-if="state.titleState == 'Reports'">
+                <table class="table" v-if="state.titleState == 'My Reports'">
                   <thead>
                     <tr>
                       <th scope="col">Name</th>
@@ -64,7 +64,7 @@
                 </table>
                 <!-- END REPORTS TABLE -->
                 <!-- ASSIGNMENT TABLE -->
-                <table class="table" v-if="state.titleState == 'Assignments'">
+                <table class="table" v-if="state.titleState == 'My Assignments'">
                   <thead>
                     <tr>
                       <th scope="col">Status</th>
@@ -143,9 +143,9 @@ export default {
         if (props.user) { return props.user; }
         return store.state.User.user;
       }),
-      courseButtonClass: 'btn-warning',
-      assignmentButtonClass: 'btn-primary',
-      reportButtonClass: 'btn-primary',
+      courseButtonClass: 'bg-white border border-dark',
+      assignmentButtonClass: 'btn-success',
+      reportButtonClass: 'btn-success',
       titleState: 'Courses',
       submittedStudents: null,
     });
@@ -156,22 +156,22 @@ export default {
       state.value.submittedAssignments = notSecondTrialAss.concat(difference);
     }
     function toggleAssignments() {
-      state.value.assignmentButtonClass = 'btn-warning';
-      state.value.reportButtonClass = 'btn-primary';
-      state.value.courseButtonClass = 'btn-primary';
-      state.value.titleState = 'Assignments';
+      state.value.assignmentButtonClass = 'bg-white border border-dark';
+      state.value.reportButtonClass = 'btn-success';
+      state.value.courseButtonClass = 'btn-success';
+      state.value.titleState = 'My Assignments';
     }
     function toggleReports() {
-      state.value.assignmentButtonClass = 'btn-primary';
-      state.value.reportButtonClass = 'btn-warning';
-      state.value.courseButtonClass = 'btn-primary';
-      state.value.titleState = 'Reports';
+      state.value.assignmentButtonClass = 'btn-success';
+      state.value.reportButtonClass = 'bg-white border border-dark';
+      state.value.courseButtonClass = 'btn-success';
+      state.value.titleState = 'My Reports';
     }
     function toggleCourses() {
-      state.value.courseButtonClass = 'btn-warning';
-      state.value.assignmentButtonClass = 'btn-primary';
-      state.value.reportButtonClass = 'btn-primary';
-      state.value.titleState = 'Courses';
+      state.value.courseButtonClass = 'bg-white border border-dark';
+      state.value.assignmentButtonClass = 'btn-success';
+      state.value.reportButtonClass = 'btn-success';
+      state.value.titleState = 'My Courses';
     }
     function getAssignment(assignmentID, courseID) {
       router.push({ name: 'Assignment', params: { assid: assignmentID, cID: courseID } });
@@ -194,6 +194,6 @@ export default {
 
 <style scoped>
 .table-responsive {
-  max-height: 50vh;
+  max-height: 65vh;
 }
 </style>

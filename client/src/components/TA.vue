@@ -1,17 +1,7 @@
 <template>
   <div class="container-fluid row" id="middleContainer">
 
-          <div class="row align-items-center">
-            <div class="col">
-              <div class="d-grid gap-3 col ">
-                <button
-                  class="btn btn-lg btn-warning"
-                  type="button"
-                >
-                  Courses
-                </button>
-              </div>
-            </div>
+          <div class="row align-items-center justify-content-center">
 <coursesContainer/>
           </div>
     </div>

@@ -53,14 +53,14 @@ export default {
       user: computed(() => store.state.User.user),
       loading: true,
     });
-    axios.get('http://127.0.0.1:3000/api/user/getinactiveusers').then((response) => {
+    axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/getinactiveusers`).then((response) => {
       state.value.listOfUsers = response.data;
       state.value.loading = false;
     });
     function activate(uid) {
-      axios.get(`http://127.0.0.1:3000/api/user/activate/${uid}`).then(() => {
+      axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/activate/${uid}`).then(() => {
         state.value.loading = true;
-        axios.get('http://127.0.0.1:3000/api/user/getinactiveusers').then((response) => {
+        axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/getinactiveusers`).then((response) => {
           state.value.listOfUsers = response.data;
           state.value.loading = false;
         });

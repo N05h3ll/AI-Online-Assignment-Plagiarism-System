@@ -42,7 +42,7 @@ v-if="state.user.accType === 'Student' && (state.searchResult || state.searchErr
 </div>
 <!-- END SEARCH OVERLAY -->
  <!--search box-->
-    <div class="w-25 float-end row" v-if="state.user.accType === 'Student'">
+    <div class="w-25 float-end row mt-sm-3" v-if="state.user.accType === 'Student'">
       <div class="input-group mb-3">
         <input
           type="text"
@@ -95,7 +95,7 @@ export default {
     }
     function search() {
       if (state.value.query) {
-        axios.post('http://127.0.0.1:3000/api/course/search',
+        axios.post(`${process.env.VUE_APP_BACKENDURL}/api/course/search`,
           { query: state.value.query, institution: state.value.user.institution }).then((res) => {
           state.value.searchError = null;
           state.value.searchResult = res.data;
@@ -106,7 +106,7 @@ export default {
       }
     }
     function enrollCourse(courseID) {
-      axios.post(`http://127.0.0.1:3000/api/course/enroll/${courseID}`).then(async () => {
+      axios.post(`${process.env.VUE_APP_BACKENDURL}/api/course/enroll/${courseID}`).then(async () => {
         state.value.enrolledSuccess = true;
         state.value.enrolledFail = false;
         await setTimeout(() => {

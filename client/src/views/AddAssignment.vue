@@ -103,7 +103,7 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       };
-      axios.post('http://127.0.0.1:3000/api/assignment/addassignment', assigmentDate, config).then(async (res) => {
+      axios.post(`${process.env.VUE_APP_BACKENDURL}/api/assignment/addassignment`, assigmentDate, config).then(async (res) => {
         state.value.error = null;
         state.value.response = res.data;
         await setTimeout(() => {
