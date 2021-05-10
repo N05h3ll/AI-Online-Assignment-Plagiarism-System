@@ -92,7 +92,7 @@ export default {
     }
     function search() {
       if (state.value.query) {
-        axios.post('http://127.0.0.1:3000/api/assignment/search',
+        axios.post(`${process.env.VUE_APP_BACKENDURL}/api/assignment/search`,
           { query: state.value.query, institution: state.value.user.institution }).then((res) => {
           state.value.searchError = null;
           state.value.searchResult = res.data;

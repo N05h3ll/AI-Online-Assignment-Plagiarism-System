@@ -142,7 +142,7 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       };
-      axios.post('http://127.0.0.1:3000/api/user/register', registerData, config).then(async () => {
+      axios.post(`${process.env.VUE_APP_BACKENDURL}/api/user/register`, registerData, config).then(async () => {
         state.value.success = true;
         await setTimeout(() => {
           router.push({ name: 'Login' });

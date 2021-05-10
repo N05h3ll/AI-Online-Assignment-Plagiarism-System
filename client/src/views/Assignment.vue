@@ -146,11 +146,11 @@ export default {
       submitted: null,
       loading: true,
     });
-    axios.get(`http://127.0.0.1:3000/api/assignment/getassignment/${route.params.assid}`).then((assignment) => {
+    axios.get(`${process.env.VUE_APP_BACKENDURL}/api/assignment/getassignment/${route.params.assid}`).then((assignment) => {
       store.dispatch('Assignment/setAssignment', assignment);
       state.value.loading = false;
     });
-    axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/issubmitted`).then(() => {
+    axios.get(`${process.env.VUE_APP_BACKENDURL}/api/assignment/${route.params.assid}/issubmitted`).then(() => {
       state.value.submitted = true;
     }).catch(() => {
       state.value.submitted = false;
@@ -168,7 +168,7 @@ export default {
     function getSubmittedStudents() {
       state.value.loading = true;
       // eslint-disable-next-line no-underscore-dangle
-      axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/getsubmittedstudents`).then((subStudents) => {
+      axios.get(`${process.env.VUE_APP_BACKENDURL}/api/assignment/${route.params.assid}/getsubmittedstudents`).then((subStudents) => {
         const secondTrialStudents = subStudents.data.filter((x) => x.status === 'Second Trial');
         const notSecondTrialStudents = subStudents.data.filter((x) => x.status !== 'Second Trial');
         const difference = secondTrialStudents.filter((y) => !notSecondTrialStudents.some((i) => i.studentdID === y.studentdID));
@@ -189,9 +189,9 @@ export default {
       router.push({ name: 'Report', params: { repid: repID } });
     }
     function allowSecondTrial(stuID, repID) {
-      axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/allow/${stuID}/rep/${repID}`).then(
+      axios.get(`${process.env.VUE_APP_BACKENDURL}/api/assignment/${route.params.assid}/allow/${stuID}/rep/${repID}`).then(
         state.value.submittedStudents = null,
-        axios.get(`http://127.0.0.1:3000/api/assignment/${route.params.assid}/getsubmittedstudents`).then(async (subStudents) => {
+        axios.get(`${process.env.VUE_APP_BACKENDURL}/api/assignment/${route.params.assid}/getsubmittedstudents`).then(async (subStudents) => {
           await setTimeout(() => { state.value.submittedStudents = subStudents.data; }, 500);
           state.value.submissionError = null;
           console.log('allowed');

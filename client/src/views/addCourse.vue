@@ -86,7 +86,7 @@ export default {
     if (!state.value.user || state.value.user.accType !== 'Module Coordinator') {
       router.push({ name: 'Home' });
     }
-    axios.get('http://127.0.0.1:3000/api/user/gettas').then((response) => {
+    axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/gettas`).then((response) => {
       console.log(response.data);
       // eslint-disable-next-line arrow-body-style
       state.value.options = response.data.map((x) => {
@@ -117,7 +117,7 @@ export default {
           'Content-Type': 'application/json',
         },
       };
-      axios.post('http://127.0.0.1:3000/api/course/addcourse', courseData, config).then(async (response) => {
+      axios.post(`${process.env.VUE_APP_BACKENDURL}/api/course/addcourse`, courseData, config).then(async (response) => {
         state.value.success = response.data;
         await setTimeout(() => {
           router.push({ name: 'Home' });

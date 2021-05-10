@@ -110,7 +110,7 @@ export default {
       loading: true,
       readmore: false,
     });
-    axios.get(`http://127.0.0.1:3000/api/report/getreport/${route.params.repid}`).then((report) => {
+    axios.get(`${process.env.VUE_APP_BACKENDURL}/api/report/getreport/${route.params.repid}`).then((report) => {
       store.dispatch('Report/setReport', report);
       state.value.loading = false;
     });
@@ -137,7 +137,7 @@ export default {
     }
     function sendReport() {
       // eslint-disable-next-line no-underscore-dangle
-      axios.get(`http://127.0.0.1:3000/api/report/emailreport/${state.value.Report.data._id}`);
+      axios.get(`${process.env.VUE_APP_BACKENDURL}/api/report/emailreport/${state.value.Report.data._id}`);
     }
     return {
       state,

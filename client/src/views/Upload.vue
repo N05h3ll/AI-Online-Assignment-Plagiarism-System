@@ -118,7 +118,7 @@ export default {
       form.append('secondTrial', route.params.ST);
       form.append('assignmentName', state.value.Assignment.data.name);
       form.append('assignmentCode', state.value.Assignment.data.code);
-      axios.post('http://127.0.0.1:5000', form, {
+      axios.post(process.env.VUE_APP_AIURL, form, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

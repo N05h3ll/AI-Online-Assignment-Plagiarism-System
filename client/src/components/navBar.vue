@@ -43,7 +43,7 @@ export default {
       user: computed(() => store.state.User.user),
     });
     (async function getUser() {
-      await axios.get('http://127.0.0.1:3000/api/user/user').then((res) => {
+      await axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/user`).then((res) => {
         console.log(res.data);
         store.dispatch('User/setUser', res.data);
       }).catch(() => {
@@ -56,7 +56,7 @@ export default {
       setTimeout(getUser, 30000);
     }());
     async function logout() {
-      await axios.get('http://127.0.0.1:3000/api/user/logout').then(() => {
+      await axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/logout`).then(() => {
         store.dispatch('User/setUser', null);
         router.push('login');
       }).catch(() => { store.dispatch('User/setUser', null); });

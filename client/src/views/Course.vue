@@ -96,7 +96,7 @@ export default {
       enrolledStudents: null,
       enrolledError: null,
     });
-    axios.get(`http://127.0.0.1:3000/api/course/getcourse/${route.params.cID}`).then((response) => {
+    axios.get(`${process.env.VUE_APP_BACKENDURL}/api/course/getcourse/${route.params.cID}`).then((response) => {
       state.value.course = response.data;
       store.dispatch('Course/setCourse', response.data);
       state.value.loading = false;

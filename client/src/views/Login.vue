@@ -74,7 +74,7 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       };
-      await axios.post('http://127.0.0.1:3000/api/user/login', loginData, config).then((res) => {
+      await axios.post(`${process.env.VUE_APP_BACKENDURL}/api/user/login`, loginData, config).then((res) => {
         store.dispatch('User/setUser', res.data.user);
         router.push('/');
       }).catch((error) => {
