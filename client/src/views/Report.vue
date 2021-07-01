@@ -20,7 +20,7 @@ v-if="state.loading">
   <div class="container" id="middleContainer" v-if="state.Report.data && !state.loading">
     <div class="row" id="registerationFormContanier">
         <h1 class="text-center" style="color: #000000">OAPS REPORT</h1>
-      <div class="col-lg-8 me-sm-3 align-self-center">
+      <div class="col-lg-8 me-sm-3 align-self-center" id="plagReport">
         <h3
         style="color: rgb(0, 0, 0);"
         >Plagirism Percentage: <strong v-if="filterList.length === 0">
@@ -54,7 +54,7 @@ v-if="state.loading">
           </tbody>
         </table>
         <p v-for="index in state.Report.data.baseParagraph" :key="index" class="inlineDisplay">
-          <span class="dropdown"
+          <span class=""
           v-if="index.active && index.percentage.$numberDecimal >= 0 &&
             ((index.percentage.$numberDecimal - 0.5) / 0.5) * 100 >
             state.filterCounter">
@@ -71,7 +71,14 @@ v-if="state.loading">
         </p>
       </div>
       <div class="col rounded me-sm-3">
-          <button class="btn btn-primary mt-sm-1" @click="sendReport">Send report via email</button>
+                <button
+              type="button"
+              v-bind:class="'btn btn-primary '+state.invisible"
+              @click="genPDF('middleContainer', 'Plagiarism report')"
+            >
+              Print Report
+            </button>
+          <button v-bind:class="'btn btn-primary mt-sm-1 '+state.invisible" @click="sendReport">Send report via email</button>
           <div class="label mt-5"> <h3> Filter Results </h3> </div>
          <div class="filterContainer mt-1">
           <div id="container" class="m-2">
@@ -95,16 +102,22 @@ v-if="state.loading">
   </div>
 </template>
 <script>
+/* eslint-disable prefer-const */
+// eslint-disable no-restricted-syntax
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { computed, ref, watch } from 'vue';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const Report = computed(() => useStore().state.Report.singleReport);
 export default {
   setup() {
     // eslint-disable-next-line no-unused-vars
     // const store = useStore();
+    // eslint-disable-next-line global-require
+    const img = require('./img.js');
     const store = useStore();
     const route = useRoute();
     const state = ref({
@@ -141,6 +154,40 @@ export default {
     function sendReport() {
       // eslint-disable-next-line no-underscore-dangle
       axios.get(`${process.env.VUE_APP_BACKENDURL}/api/report/emailreport/${state.value.Report.data._id}`);
+    }
+    function sleep(milliseconds) {
+      const date = Date.now();
+      let currentDate = null;
+      do {
+        currentDate = Date.now();
+      } while (currentDate - date < milliseconds);
+    }
+    function dsble() {
+      state.value.invisible = 'invisible';
+      sleep(2000);
+    }
+    async function genPDF(bodyID, text) {
+      state.value.readmore = true;
+      await dsble();
+      window.scrollTo(0, 0);
+      if (state.value.invisible) {
+        html2canvas(document.getElementById(bodyID)).then((canvas) => {
+          // eslint-disable-next-line new-cap
+          let doc = new jsPDF();
+          let imgData = canvas.toDataURL('image/png');
+          let imgWidth = 208;
+          let imgHeight = (canvas.height * imgWidth) / canvas.width;
+          doc.addImage(img, 'PNG', 5, 5, 20, 15);
+          doc.setFontSize(15);
+          doc.text(text, 105, 30, 'center');
+          doc.addImage(imgData, 'JPEG', 2, 37, imgWidth, imgHeight);
+          doc.save(`${Date.now()}report.pdf`);
+        });
+        // eslint-disable-next-line max-len
+        window.scrollTo(0, document.body.scrollHeight * 1.5 || document.documentElement.scrollHeight * 1.5);
+        state.value.invisible = null;
+        state.value.readmore = false;
+      }
     }
     return {
       state,
