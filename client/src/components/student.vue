@@ -1,7 +1,7 @@
 <template>
 <!-- eslint-disable max-len  -->
-<assignmentsSearch v-if="state.titleState === 'Assignments'"/>
-<coursesSearch v-if="state.titleState === 'Courses'"/>
+<assignmentsSearch v-if="state.titleState === 'My Assignments'"/>
+<coursesSearch v-if="state.titleState === 'My Courses'"/>
     <!-- STUDENT -->
     <div class="container-fluid row mt-4">
                 <div class="row align-items-center">
@@ -29,9 +29,9 @@
                 </button>
               </div>
             </div>
-            <courses-container v-if="state.titleState === 'Courses'"/>
+            <courses-container v-if="state.titleState === 'My Courses'"/>
             <div class="col-9 rounded" id="registerationFormContanier"
-            v-if="state.titleState !== 'Courses'">
+            v-if="state.titleState !== 'My Courses'">
               <h2 class="h2 m-3 text-dark">{{state.titleState}}</h2>
               <div class="table-responsive overflow-scroll" style="height: 40rem;">
                 <!-- Reports TABLE -->
@@ -157,7 +157,7 @@ export default {
       courseButtonClass: 'bg-white border border-dark',
       assignmentButtonClass: 'btn-success',
       reportButtonClass: 'btn-success',
-      titleState: 'Courses',
+      titleState: 'My Courses',
       submittedStudents: null,
     });
     if (state.value.user) {
@@ -201,6 +201,7 @@ export default {
       toggleCourses,
       getAssignment,
       getReport,
+      delReport,
     };
   },
 };
