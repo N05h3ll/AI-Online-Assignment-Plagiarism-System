@@ -127,5 +127,11 @@ router.post('/addreport', async (req,res)=>{
   else if(dumpReport !== 'true'){saveReport(dumpReport)}
   
 })
-
+router.delete('/delete/:rid', utils.isLoggedIn, (req, res) => {
+  Report.findOne({ _id: req.params.rid } , (error, rep) => {
+    if (error) { return res.status(500).send('Internal Server Error!') }
+    rep.remove()
+    return res.status(200).send("deleted")
+  })
+})
 module.exports = router

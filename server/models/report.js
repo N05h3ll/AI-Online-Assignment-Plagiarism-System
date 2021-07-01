@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { type } = require('os');
 const schema = mongoose.Schema;
+const assignment = require('./assignment');
+// const user = require("./user");
 const reportSchema = new schema({
   author: { type: String },
   email: { type: String },
@@ -22,11 +24,17 @@ const reportSchema = new schema({
         percentage: { type: mongoose.Schema.Types.Decimal128 },
         url: { type: String },
       }],
-    },
-  
-    
-  
+    }, 
 });
+
+reportSchema.post('remove', (doc) => {
+  mongoose.model('user').findOneAndUpdate({ email: doc.email }, { $pull: { submittedAssignments: { reportID: doc._id } } }, { multi: true }, (error, done) => {
+    return
+  })
+  assignment.findByIdAndUpdate(doc.assignmentID, { $pull: { submittedStudents: { reportID: doc._id } } }, { multi: true }, (error, done) => {
+    return
+  })
+})
 
 const report = mongoose.model('report', reportSchema);
 module.exports = report;

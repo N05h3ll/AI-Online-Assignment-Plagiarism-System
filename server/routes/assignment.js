@@ -178,4 +178,11 @@ router.get('/:assID/allow/:stuID/rep/:repID', utils.isLoggedIn, (req, res) => {
 		})
 	})
 })
+router.delete('/delete/:aid', utils.isLoggedIn, (req, res) => {
+  Assignment.findOne({ _id: req.params.aid } , (error, ass) => {
+    if (error) { return res.status(500).send('Internal Server Error!') }
+    ass.remove()
+    return res.status(200).send("deleted")
+  })
+})
 module.exports = router

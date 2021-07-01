@@ -14,6 +14,7 @@ v-if="state.loading">
           <th scope="col">Email</th>
           <th scope="col">Account Type</th>
           <th scope="col"></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,15 @@ v-if="state.loading">
               v-bind:disabled="user.active"
             >
               Activate
+            </button>
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              @click="deleteUser(user._id)"
+            >
+              DELETE
             </button>
           </td>
         </tr>
@@ -57,6 +67,9 @@ export default {
       state.value.listOfUsers = response.data;
       state.value.loading = false;
     });
+    function deleteUser(uid) {
+      axios.delete(`${process.env.VUE_APP_BACKENDURL}/api/user/delete/${uid}`);
+    }
     function activate(uid) {
       axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/activate/${uid}`).then(() => {
         state.value.loading = true;
@@ -69,6 +82,7 @@ export default {
     return {
       state,
       activate,
+      deleteUser,
     };
   },
 };

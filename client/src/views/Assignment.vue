@@ -111,6 +111,9 @@ v-if="!state.loading">
       <div class="row"><button class="btn btn-primary"
       v-if="state.user.accType == 'Module Coordinator' || state.user.accType == 'Teacher Assistant'"
       @click="getSubmittedStudents">View Submitted Students</button></div>
+      <div v-bind:class="'row mt-1 '+state.invisible"><button class="btn btn-danger"
+      v-if="state.user.accType == 'Module Coordinator'"
+      @click="delAssignment(state.Assignemnt.data._id)">Delete Course</button></div>
     </div>
 </template>
 
@@ -202,6 +205,9 @@ export default {
         }),
       );
     }
+    function delAssignment(aid) {
+      axios.delete(`${process.env.VUE_APP_BACKENDURL}/api/assignment/delete/${aid}`);
+    }
     return {
       state,
       submit,
@@ -209,6 +215,7 @@ export default {
       getSubmittedStudents,
       getReport,
       allowSecondTrial,
+      delAssignment,
     };
   },
 };

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const schema = mongoose.Schema;
+const assignment = require('./assignment');
 const courseSchema = new schema({
   courseName: {type: String},
   createdOn: {type: Date},
@@ -14,5 +15,19 @@ const courseSchema = new schema({
 		
 });
 
+courseSchema.post('remove', (doc) => {
+	assignment.deleteMany({ _id: { $in: doc.assignments } }, (error, ass) => {
+		return
+	})
+	mongoose.model('user').findOneAndUpdate({ _id: doc.creator }, { $pull: { createdCourses: doc._id } }, (error, cc) => {
+		return
+	})
+	mongoose.model('user').find({ _id: {$in: doc.enrolledStudents} }, (error, users) => {
+		users.forEach((user) => {
+			user.enrolledCourses.pop(doc._id);
+			user.save();
+		})
+	})
+});
 const course = mongoose.model('course', courseSchema);
 module.exports = course;

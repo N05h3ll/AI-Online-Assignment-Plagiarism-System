@@ -42,6 +42,7 @@
                       <th scope="col">Code</th>
                       <th scope="col">Note</th>
                       <th scope="col"></th>
+                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -57,6 +58,15 @@
                           @click="getReport(report._id)"
                         >
                           View
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          @click="delReport(report._id)"
+                        >
+                          DELETE
                         </button>
                       </td>
                     </tr>
@@ -119,6 +129,7 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import axios from 'axios';
 import coursesContainer from './coursesContainer.vue';
 import assignmentsSearch from './assignmentsSearch.vue';
 import coursesSearch from './coursesSearch.vue';
@@ -179,6 +190,9 @@ export default {
     function getReport(repID) {
       // console.log(assignmentID);
       router.push({ name: 'Report', params: { repid: repID } });
+    }
+    function delReport(repID) {
+      axios.delete(`${process.env.VUE_APP_BACKENDURL}/api/report/delete/${repID}`);
     }
     return {
       state,

@@ -18,5 +18,17 @@ const assignmentSchema = new schema({
     }]
 });
 
+assignmentSchema.post('remove', (doc) => {
+    var reps = doc.submittedStudents.map((x) => { x.reportID })
+    mongoose.model('report').find({ _id: { $in: reps } }, (error, repos) => {
+        repos.forEach((rep) => {
+            rep.remove();
+        })
+    })
+    mongoose.model('course').findByIdAndUpdate(courseID, { $pull: { assignments: doc._id } }, (error, css) => {
+        return
+    })
+});
+
 const assignment = mongoose.model('assignment', assignmentSchema);
 module.exports = assignment;

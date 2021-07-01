@@ -176,5 +176,12 @@ router.get('/activate/:uid', utils.isLoggedIn, (req, res) => {
     return res.status(200).send('done');
   })
 })
+router.delete('/delete/:uid', utils.isLoggedIn, (req, res) => {
+  User.findOne({ _id: req.params.uid } , (error, use) => {
+    if (error) { return res.status(500).send('Internal Server Error!') }
+    use.remove()
+    return res.status(200).send("deleted")
+  })
+})
 
 module.exports = router;

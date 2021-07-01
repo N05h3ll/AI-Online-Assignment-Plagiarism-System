@@ -11,6 +11,7 @@
                       v-if="state.user.accType === 'Module Coordinator'">Enrolled Students</th>
                       <th scope="col">Assignments</th>
                       <th scope="col"></th>
+                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -28,6 +29,15 @@
                           @click="getCourse(course._id)"
                         >
                           View
+                        </button>
+                      </td>
+                      <td v-if="state.user.accType === 'Module Coordinator'">
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          @click="delCourse(course._id)"
+                        >
+                          Delete
                         </button>
                       </td>
                     </tr>
@@ -48,6 +58,7 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import axios from 'axios';
 
 export default {
 
@@ -77,11 +88,15 @@ export default {
     function getCourse(courseID) {
       router.push({ name: 'Course', params: { cID: courseID } });
     }
+    function delCourse(cid) {
+      axios.delete(`${process.env.VUE_APP_BACKENDURL}/api/course/delete/${cid}`);
+    }
     return {
       state,
       addCourse,
       getCourse,
       close,
+      delCourse,
     };
   },
 };

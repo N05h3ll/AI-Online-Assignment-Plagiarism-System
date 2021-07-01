@@ -108,4 +108,11 @@ router.post('/enroll/:courseID', utils.isLoggedIn, (req, res) => {
 		})
 	})
 })
+router.delete('/delete/:cid', utils.isLoggedIn, (req, res) => {
+  Course.findOne({ _id: req.params.cid } , (error, crs) => {
+    if (error) { return res.status(500).send('Internal Server Error!') }
+    crs.remove()
+    return res.status(200).send("deleted")
+  })
+})
 module.exports = router
