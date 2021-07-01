@@ -1,14 +1,14 @@
 <template>
+<!-- eslint-disable max-len -->
 
 <div class="container-fluid ">
   <div v-if="!state.user">
     <!--welcome-->
     <div class="container mt-lg-5">
       <h1 class="text-dark">Welcome To,  Online Assigment Plagiarsim System</h1>
-      <p class="text-dark">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget eros sapien.
-        Pellentesque vulputate sed ligula quis dapibus. Proin varius metus ac lorem egestas, id
-        aliquam eros dapibus.
+      <p class="text-dark w-75">
+        This system has the ability to check plagiarism by matching your content against billions of webpages on the Internet.
+         Once you upload your content, it will automatically run it against every existing content on the web within seconds.
       </p>
       <img class="img-fluid mx-auto d-block"
       src="../../public/Home-Image.png" style="max-height: 50vh;"/>

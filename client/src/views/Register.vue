@@ -1,14 +1,14 @@
 <template>
+<!-- eslint-disable max-len -->
   <div class="container" id="middleContainer">
     <div class="row">
       <div class="col me-sm-3 align-self-center">
         <h2 class="h2 text-dark">AI Online Assignment Plagiarism System</h2>
         <p class="text-dark">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget eros sapien.
-          Pellentesque vulputate sed ligula quis dapibus. Proin varius metus ac lorem egestas, id
-          aliquam eros dapibus. Aliquam tempus sem ut sem pellentesque, id varius turpis vulputate.
-          Proin malesuada sit amet neque nec hendrerit. Phasellus eu tortor lorem. Fusce vehicula
-          efficitur ultrices.
+         Our anti-plagiarism engine comes with a reporting option which allows you to download a report of the plagiarism search you run.
+         This means you now have some sort of evidence to send across to the relevant parties and a record to keep. Awesome!
+         <br/>
+         <span class="text-success">Join Us Today to Enjoy This Experience.</span>
         </p>
         <img class="img-fluid"
         src="../../public/Home-Image.png" style="max-height: 50vh;"/>
@@ -56,6 +56,11 @@
               required
             />
             <label for="floatingInput">Email address</label>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Egypt (+20)</span>
+             <input type="text" class="form-control" placeholder="Phone Number, 1xxxxxxxxx"
+             aria-label="Username" aria-describedby="basic-addon1" maxlength="10" v-model="state.phone" required>
           </div>
           <div class="mb-3">
             <select
@@ -122,6 +127,7 @@ export default {
   setup() {
     const state = ref({
       email: '',
+      phone: '',
       password: '',
       accType: '',
       firstName: '',
@@ -136,6 +142,8 @@ export default {
       registerData.append('firstName', state.value.firstName);
       registerData.append('lastName', state.value.lastName);
       registerData.append('email', state.value.email);
+      // eslint-disable-next-line prefer-template
+      registerData.append('phone', '+20' + state.value.phone);
       registerData.append('accType', state.value.accType);
       registerData.append('institution', state.value.institution);
       registerData.append('password', state.value.password);

@@ -13,9 +13,16 @@ v-if="(state.user.accType == 'Module Coordinator'
   <button type="button" class="btn-close" aria-label="Close" @click="close"></button>
   <div class="align-self-center h1" v-if="state.submissionError">{{ state.submissionError }}</div>
     <div class="table-responsive mt-lg-5 w-100 overflow-scroll" v-if="state.submittedStudents">
-    <table class="table">
+    <table class="table" id="tbl">
       <thead>
       <h3 class="text-center">Total Submissions: {{state.submittedStudents.length}}</h3>
+              <button
+              type="button"
+              v-bind:class="'btn btn-primary btn-sm '+state.invisible"
+              @click="genPDF('tbl', 'Report of Submitted Students')"
+            >
+              Print Report
+            </button>
         <tr>
           <th scope="col">Name</th>
           <th scope="col">Submission Date</th>
@@ -45,7 +52,7 @@ v-if="(state.user.accType == 'Module Coordinator'
           <td>
             <button
               type="button"
-              class="btn btn-primary btn-sm"
+              v-bind:class="'btn btn-primary btn-sm '+state.invisible"
               @click="getReport(student.reportID._id)"
             >
               View Report
@@ -77,7 +84,7 @@ v-if="(state.user.accType == 'Module Coordinator'
   </div>
 </div>
 <div class="container rounded" id="registerationFormContanier"
-v-if="!state.loading">
+v-if="!state.loading" ref="crs">
       <table>
         <h2 class="h2 m-3 text-dark">Course: {{state.course.courseName}}</h2>
         <tr>
@@ -108,17 +115,31 @@ v-if="!state.loading">
       v-if="state.submitted &&
       state.user.accType == 'Student'">You have already submitted this assignemnt.</h3>
       </div>
-      <div class="row"><button class="btn btn-primary"
+      <div v-bind:class="'row '+state.invisible"><button class="btn btn-primary"
       v-if="state.user.accType == 'Module Coordinator' || state.user.accType == 'Teacher Assistant'"
       @click="getSubmittedStudents">View Submitted Students</button></div>
+      <div v-bind:class="'row mt-1 '+state.invisible"><button class="btn btn-danger"
+      v-if="state.user.accType == 'Module Coordinator'"
+      @click="delAssignment(state.Assignemnt.data._id)">Delete Course</button></div>
+      <div v-bind:class="'row mt-1 '+state.invisible" v-if="state.user.accType == 'Module Coordinator' || state.user.accType == 'Teacher Assistant'"
+      ><button
+              type="button"
+              class="btn btn-primary"
+              @click="genPDF('registerationFormContanier', 'Assignment Details')"
+            >
+              Print Report
+            </button></div>
     </div>
 </template>
 
 <script>
+/* eslint-disable prefer-const */
 /* eslint-disable max-len */
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 import { ref, computed } from 'vue';
 
 const Assignment = computed(() => useStore().state.Assignment.singleAssignment);
@@ -131,6 +152,8 @@ export default {
     },
   },
   setup(props) {
+    // eslint-disable-next-line global-require
+    const img = require('./img.js');
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
@@ -145,6 +168,7 @@ export default {
       submissionError: null,
       submitted: null,
       loading: true,
+      invisible: null,
     });
     axios.get(`${process.env.VUE_APP_BACKENDURL}/api/assignment/getassignment/${route.params.assid}`).then((assignment) => {
       store.dispatch('Assignment/setAssignment', assignment);
@@ -172,13 +196,9 @@ export default {
         const secondTrialStudents = subStudents.data.filter((x) => x.status === 'Second Trial');
         const notSecondTrialStudents = subStudents.data.filter((x) => x.status !== 'Second Trial');
         const difference = secondTrialStudents.filter((y) => !notSecondTrialStudents.some((i) => i.studentdID === y.studentdID));
-        console.log(secondTrialStudents);
-        console.log(notSecondTrialStudents);
-        console.log(difference);
         state.value.submittedStudents = notSecondTrialStudents.concat(difference);
         state.value.submissionError = null;
         state.value.loading = false;
-        console.log(subStudents.data);
       }).catch((error) => {
         state.value.submittedStudents = null;
         state.value.submissionError = error.response.data;
@@ -186,7 +206,6 @@ export default {
       });
     }
     function getReport(repID) {
-      // console.log(assignmentID);
       router.push({ name: 'Report', params: { repid: repID } });
     }
     function allowSecondTrial(stuID, repID) {
@@ -195,12 +214,45 @@ export default {
         axios.get(`${process.env.VUE_APP_BACKENDURL}/api/assignment/${route.params.assid}/getsubmittedstudents`).then(async (subStudents) => {
           await setTimeout(() => { state.value.submittedStudents = subStudents.data; }, 500);
           state.value.submissionError = null;
-          console.log('allowed');
         }).catch((error) => {
           state.value.submittedStudents = null;
           state.value.submissionError = error.response.data;
         }),
       );
+    }
+    function delAssignment(aid) {
+      axios.delete(`${process.env.VUE_APP_BACKENDURL}/api/assignment/delete/${aid}`);
+    }
+    function sleep(milliseconds) {
+      const date = Date.now();
+      let currentDate = null;
+      do {
+        currentDate = Date.now();
+      } while (currentDate - date < milliseconds);
+    }
+    function dsble() {
+      state.value.invisible = 'invisible';
+      sleep(2000);
+    }
+    async function genPDF(bodyID, text) {
+      await dsble();
+      window.scrollTo(0, 0);
+      if (state.value.invisible) {
+        html2canvas(document.getElementById(bodyID)).then((canvas) => {
+          // eslint-disable-next-line new-cap
+          let doc = new jsPDF();
+          let imgData = canvas.toDataURL('image/png');
+          let imgWidth = 208;
+          let imgHeight = (canvas.height * imgWidth) / canvas.width;
+          doc.addImage(img, 'PNG', 5, 5, 20, 15);
+          doc.setFontSize(15);
+          doc.text(text, 105, 30, 'center');
+          doc.addImage(imgData, 'JPEG', 2, 37, imgWidth, imgHeight);
+          doc.save(`${Date.now()}report.pdf`);
+        });
+        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+        state.value.invisible = null;
+      }
     }
     return {
       state,
@@ -209,6 +261,8 @@ export default {
       getSubmittedStudents,
       getReport,
       allowSecondTrial,
+      delAssignment,
+      genPDF,
     };
   },
 };

@@ -38,7 +38,6 @@
                 />
                 <label for="floatingInput">Description</label>
             </div>
-            <div v-html="state.content"></div>
             <button type="submit" class="btn btn-success">Create</button>
             <button type="reset" class="btn btn-outline-danger ms-sm-4">Cancel</button>
             </form>

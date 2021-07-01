@@ -47,6 +47,7 @@ router.post("/register", async (req, res) => {
       User.register(
         new User({
           email: req.body.email,
+          phone: req.body.phone,
           active: activeState,
           name: req.body.firstName + " " + req.body.lastName,
           accType: req.body.accType,
@@ -164,7 +165,7 @@ router.get('/gettas', utils.isLoggedIn, (req, res) => {
  })
 
 router.get('/getinactiveusers', utils.isLoggedIn, (req, res) => {
-  User.find({ active: false, $or: [{accType: 'Module Coordinator'}, {accType: 'Teacher Assistant'}] } ).exec((error, users) => {
+  User.find({  $or: [{accType: 'Module Coordinator'}, {accType: 'Teacher Assistant'}, {accType: 'Student'}] } ).exec((error, users) => {
     if (error) { return res.status(500).send("Internal Server Error!") }
     return res.status(200).send(users);
   })
@@ -174,6 +175,13 @@ router.get('/activate/:uid', utils.isLoggedIn, (req, res) => {
     if (error) { return res.status(500).send("Internal Server Error!") }
     else if (!user || user.length == 0) { return res.status(400).send("User not found!") }
     return res.status(200).send('done');
+  })
+})
+router.delete('/delete/:uid', utils.isLoggedIn, (req, res) => {
+  User.findOne({ _id: req.params.uid } , (error, use) => {
+    if (error) { return res.status(500).send('Internal Server Error!') }
+    use.remove()
+    return res.status(200).send("deleted")
   })
 })
 
