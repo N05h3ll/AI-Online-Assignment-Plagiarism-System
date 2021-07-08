@@ -4,8 +4,9 @@ v-if="state.loading">
 <div class="align-self-center h1">
     Loading ...</div>
 </div>
+<div class="container me-sm-1" id="middleContainer">
     <div class="col-10 rounded me-sm-3" id="registerationFormContanier">
-  <h2 class="h2 m-3 text-dark">Users Pending Activation</h2>
+  <h2 class="h2 m-3 text-dark">{{state.user.institution}} System Users</h2>
   <div class="table-responsive overflow-scroll">
     <table class="table">
       <thead>
@@ -45,6 +46,7 @@ v-if="state.loading">
       </tbody>
     </table>
   </div>
+</div>
 </div>
 </template>
 
