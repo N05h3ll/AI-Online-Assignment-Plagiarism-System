@@ -14,6 +14,7 @@ import moduleCoordinatorAssignments from '../views/moduleCoordinatorAssignments.
 import STUHelp from '../views/STUHelp.vue';
 import TAHelp from '../views/TAHelp.vue';
 import MCHelp from '../views/MCHelp.vue';
+import Profile from '../views/Profile.vue';
 
 const routes = [
   {
@@ -88,6 +89,11 @@ const routes = [
     path: "/help/ModuleCoordinator",
     name: 'MC Help',
     component: MCHelp,
+  },
+  {
+    path: "/user/:uID",
+    name: 'Profile',
+    component: Profile,
   },
 ];
 
