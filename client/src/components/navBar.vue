@@ -13,7 +13,7 @@
         </router-link>
           </li>
             <li class="nav-item">
-              <router-link :to="{name:'Home'}">
+              <router-link :to="{name:'Profile', params: {uID: state.user._id}}">
                 <button
                 class="btn btn-outline-light me-sm-3"
                 v-if="state.user">{{state.user.name}}</button>
@@ -51,7 +51,7 @@ export default {
           router.push({ name: 'Home' });
         }
       });
-      setTimeout(getUser, 30000);
+      setTimeout(getUser, 2000);
     }());
     async function logout() {
       await axios.get(`${process.env.VUE_APP_BACKENDURL}/api/user/logout`).then(() => {
