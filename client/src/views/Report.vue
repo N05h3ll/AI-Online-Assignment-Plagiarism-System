@@ -71,7 +71,11 @@ v-if="state.showSources">
           v-if="index.active && index.percentage.$numberDecimal >= 0 &&
             ((index.percentage.$numberDecimal - 0.5) / 0.5) * 100 >
             state.filterCounter">
-            <a href="#" style="background-color:#e66a6a" class="text-dark"
+            <a v-if="state.invisible !== 'invisible'" style="background-color:#e66a6a" class="text-dark"
+             id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{ index.baseSentence + " " }}
+            </a>
+            <a v-if="state.invisible === 'invisible'" style="color:#e66a6a" class="text-danger"
              id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                       {{ index.baseSentence + " " }}
             </a>
@@ -86,7 +90,7 @@ v-if="state.showSources">
       <div class="col rounded me-sm-3">
                 <button
               type="button"
-              v-bind:class="'btn btn-primary '+state.invisible"
+              v-bind:class="'btn btn-primary mt-sm-1 mx-sm-1 '+state.invisible"
               @click="genPDF('middleContainer', 'Plagiarism report')"
             >
               Print Report
