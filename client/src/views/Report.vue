@@ -11,7 +11,8 @@ v-if="state.showSources">
     {{state.counts}}
     </div>
 </div>
-  <div class="float-end me-sm-3 mt-1" v-if="!state.loading">
+<div class="container">
+  <div class="row float-end me-sm-3 mt-1 mb-2" v-if="!state.loading">
     <div class="input-group mb-3 rounded">
             <span class="input-group-text" id="basic-addon1">Choose filter percentage:</span>
              <select class="form-control" placeholder="Percentage"
@@ -30,8 +31,8 @@ v-if="state.showSources">
                </select>
           </div>
   </div>
-  <div class="container" id="middleContainer" v-if="state.Report.data && !state.loading">
-    <div class="row" id="registerationFormContanier">
+  <div class="container row" id="middleContainer" v-if="state.Report.data && !state.loading">
+    <div class="row rounded" id="registerationFormContanier">
         <h1 class="text-center" style="color: #000000">OAPS REPORT</h1>
       <div class="col-lg-8 me-sm-3 align-self-center" id="plagReport">
         <h3
@@ -117,6 +118,7 @@ v-if="state.showSources">
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 /* eslint-disable prefer-const */
@@ -161,7 +163,6 @@ export default {
       state.value.counts = src;
       state.value.loading = false;
     });
-    console.log(state.value.Report);
     // eslint-disable-next-line max-len
     const filterList = computed(
       () => state.value.Report.data.baseParagraph.filter(
