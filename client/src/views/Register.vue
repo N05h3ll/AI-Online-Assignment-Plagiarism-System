@@ -138,6 +138,11 @@ export default {
     });
     const router = useRouter();
     function register() {
+      state.value.error = '';
+      if (state.value.password.length < 8) {
+        state.value.error = 'Password must be at least 8 characters.';
+        return;
+      }
       const registerData = new URLSearchParams();
       registerData.append('firstName', state.value.firstName);
       registerData.append('lastName', state.value.lastName);
