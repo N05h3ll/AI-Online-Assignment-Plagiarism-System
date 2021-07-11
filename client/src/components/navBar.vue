@@ -12,7 +12,7 @@
             </button>
         </router-link>
           </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="state.user">
               <router-link :to="{name:'Profile', params: {uID: state.user._id}}">
                 <button
                 class="btn btn-outline-light me-sm-3"
